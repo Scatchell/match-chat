@@ -1,11 +1,13 @@
 class MessagesController < ApplicationController
   def index
-    @user = current_user
-    @messages = @user.messages.all
+    @chatroom = Chatroom.find(params[:chatroom_id])
+    @messages = @chatroom.messages.all
   end
 
   def create
-    @user = current_user
-    @message = @user.messages.create!(params[:message].permit(:content))
+    @chatroom = Chatroom.find(params[:chatroom_id])
+    @message = @chatroom.messages.create(params[:message].permit(:content))
+    @message.user = current_user
+    @message.save
   end
 end

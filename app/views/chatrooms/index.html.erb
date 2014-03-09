@@ -2,24 +2,30 @@
 
 <table>
   <thead>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
+  <tr>
+    <th>Chatroom name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @chatrooms.each do |chatroom| %>
+  <% @chatrooms.each do |chatroom| %>
       <tr>
-        <p>
-          <%= chatroom.title %>
-        </p>
+        <td>
+          <p>
+            <%= chatroom.title %>
+          </p>
+        </td>
+
         <td><%= link_to 'Show', chatroom %></td>
+
         <td><%= link_to 'Edit', edit_chatroom_path(chatroom) %></td>
-        <td><%= link_to 'Destroy', chatroom, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+        <td><%= link_to 'Destroy', chatroom, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 

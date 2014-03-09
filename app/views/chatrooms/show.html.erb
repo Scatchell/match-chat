@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   Title: <%= @chatroom.title %>
 </p>
@@ -16,13 +14,13 @@
 
     <p>
       <div style="width: 500px; height: 300px; border: solid black; overflow: auto" id="chat">
-        <%=  render(current_user.messages) %>
+        <%=  render(@chatroom.messages) %>
       </div>
     </p>
 </p>
 
 <p>
-  <%= form_for([current_user, current_user.messages.build], remote: true) do |f| %>
+  <%= form_for([@chatroom, @chatroom.messages.build], remote: true) do |f| %>
       <%= f.text_field :content, id: 'new_message' %>
       <%= f.submit 'Send' %>
   <% end %>
@@ -30,3 +28,5 @@
 
 <%= link_to 'Edit', edit_chatroom_path(@chatroom) %> |
 <%= link_to 'Back', chatrooms_path %>
+
+<%= subscribe_to '/messages/new/' + @chatroom.id.to_s %>
