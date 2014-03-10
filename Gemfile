@@ -46,9 +46,6 @@ gem 'private_pub'
 gem 'thin'
 gem 'devise'
 gem 'pg'
-
-group :test do
-    gem 'sqlite3'
-end
+gem 'unicorn'
 
 ruby '2.0.0'
