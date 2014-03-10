@@ -48,5 +48,6 @@ gem 'devise'
 gem 'pg'
 gem 'unicorn'
 gem 'rails_12factor'
+gem 'rspec-rails'
 
 ruby '2.0.0'
