@@ -47,5 +47,6 @@ gem 'thin'
 gem 'devise'
 gem 'pg'
 gem 'unicorn'
+gem 'rails_12factor'
 
 ruby '2.0.0'
