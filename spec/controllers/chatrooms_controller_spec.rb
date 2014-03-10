@@ -30,6 +30,8 @@ describe ChatroomsController do
   # ChatroomsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+  before { controller.stub(:authenticate_user!).and_return true }
+
   describe "GET index" do
     it "assigns all chatrooms as @chatrooms" do
       chatroom = Chatroom.create! valid_attributes

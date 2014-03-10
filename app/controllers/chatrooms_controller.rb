@@ -1,6 +1,8 @@
 class ChatroomsController < ApplicationController
   before_action :set_chatroom, only: [:show, :edit, :update, :destroy]
 
+  before_filter :authenticate_user!, only: [:create, :new, :update, :destroy, :show]
+
   # GET /chatrooms
   # GET /chatrooms.json
   def index
