@@ -48,3 +48,4 @@ end
 gem 'private_pub'
 gem 'thin'
 gem 'devise'
+gem 'pg'

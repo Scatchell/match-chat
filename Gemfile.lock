@@ -86,6 +86,7 @@ GEM
     minitest (4.7.5)
     multi_json (1.9.0)
     orm_adapter (0.5.0)
+    pg (0.17.1)
     polyglot (0.3.4)
     private_pub (1.0.3)
       faye
@@ -155,6 +156,7 @@ DEPENDENCIES
   devise
   jbuilder (~> 1.2)
   jquery-rails
+  pg
   private_pub
   rails (= 4.0.3)
   sass-rails (~> 4.0.0)
