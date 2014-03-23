@@ -35,8 +35,9 @@ describe ChatroomsController do
   describe "GET index" do
     it "assigns all chatrooms as @chatrooms" do
       chatroom = Chatroom.create! valid_attributes
+      chatroom2 = Chatroom.create! valid_attributes
       get :index, {}, valid_session
-      assigns(:chatrooms).should eq([chatroom])
+      assigns(:chatrooms).to_a.should eq([chatroom, chatroom2])
     end
   end
 

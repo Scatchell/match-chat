@@ -1,9 +1,9 @@
-<h1>Listing chatrooms</h1>
+<h2>Currently available chatrooms:</h2>
 
 <table>
   <thead>
   <tr>
-    <th>Chatroom name</th>
+    <th>Chatroom name:</th>
     <th></th>
     <th></th>
     <th></th>
@@ -32,3 +32,21 @@
 <br>
 
 <%= link_to 'New Chatroom', new_chatroom_path %>
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+<h2>Pick your topic of interest:
+</h2>
+
+<br/>
+<br/>
+
+<div id="topics">
+  <% @topics.each do |topic| %>
+      <%= topic.name %> <%= link_to 'teach', new_taker_path(topic) %>
+      <br/>
+  <% end %>
+</div>
