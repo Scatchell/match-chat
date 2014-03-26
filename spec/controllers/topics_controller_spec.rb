@@ -11,9 +11,21 @@ describe TopicsController do
   it 'should add a giver to a topic' do
     topic = Topic.create! valid_attributes
 
-    get :register_giver, {:id => topic.to_param}, valid_session
+    get :register_giver, {id: topic.to_param}, valid_session
 
-    response.should redirect_to(new_giver_path(topic))
+    response.should redirect_to(Chatroom.last)
+  end
+
+  it 'should redirect a giver to an already existing takers chatroom if they exist' do
+    topic = Topic.create! valid_attributes
+
+    get :register_taker, {id: topic.to_param}, valid_session
+
+    takers_chatroom = Chatroom.last
+
+    get :register_giver, {id: topic.to_param}, valid_session
+
+    response.should redirect_to(takers_chatroom)
   end
 
 end

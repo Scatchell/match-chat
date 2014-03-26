@@ -1,7 +1,7 @@
 class CreateDefaultTopics < ActiveRecord::Migration
   def change
-    Topic.create!(name: 'computers')
-    Topic.create!(name: 'rails')
-    Topic.create!(name: 'music')
+    TopicBu.create!(name: 'computers')
+    TopicBu.create!(name: 'rails')
+    TopicBu.create!(name: 'music')
   end
 end
