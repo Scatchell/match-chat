@@ -3,10 +3,9 @@ class TopicsController < ApplicationController
     topic = Topic.find(params[:id])
 
     if topic.giver_has_match?
-      redirect_to topic.match_for_giver
+      redirect_to topic.match_for_giver.chatroom
     else
-      #todo change name so it creates a proper name (the name may not matter - maybe just an id?)
-      chatroom = Chatroom.create!(title: 'another_test')
+      chatroom = Chatroom.create!
       topic.add_giver chatroom
       redirect_to chatroom
     end
@@ -17,9 +16,9 @@ class TopicsController < ApplicationController
     topic = Topic.find(params[:id])
 
     if topic.taker_has_match?
-      redirect_to topic.match_for_taker
+      redirect_to topic.match_for_taker.chatroom
     else
-      chatroom = Chatroom.create!(title: 'another_test')
+      chatroom = Chatroom.create!
       topic.add_taker chatroom
       redirect_to chatroom
     end

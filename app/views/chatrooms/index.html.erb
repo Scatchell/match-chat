@@ -6,7 +6,6 @@
     <th>Chatroom name:</th>
     <th></th>
     <th></th>
-    <th></th>
   </tr>
   </thead>
 
@@ -19,11 +18,9 @@
           </p>
         </td>
 
-        <td><%= link_to 'Show', chatroom %></td>
+        <td><%= link_to 'Join', chatroom %></td>
 
-        <td><%= link_to 'Edit', edit_chatroom_path(chatroom) %></td>
-
-        <td><%= link_to 'Destroy', chatroom, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td><%= link_to 'Remove chatroom', chatroom, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
   <% end %>
   </tbody>
@@ -46,7 +43,7 @@
 
 <div id="topics">
   <% @topics.each do |topic| %>
-      <%= topic.name %> <%= link_to 'teach', new_taker_path(topic) %>
+      <%= topic.name %> <%= link_to 'teach', new_taker_path(topic) %> or <%= link_to 'learn', new_giver_path(topic) %>
       <br/>
   <% end %>
 </div>

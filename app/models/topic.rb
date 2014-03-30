@@ -1,40 +1,49 @@
 class Topic < ActiveRecord::Base
-  #todo given the chatroom instead of users idea, may want to change this to store lists of chatrooms
-  attr_reader :givers
-  attr_reader :takers
+  has_many :sessions
+
+  GIVER_SESSION_TYPE = 'giver'
+  TAKER_SESSION_TYPE = 'taker'
 
   def giver_has_match?
-    initialize_if_not_existing
-
-    !@takers.empty?
+    return session_exists_of_type(TAKER_SESSION_TYPE)
   end
+
 
   def taker_has_match?
-    initialize_if_not_existing
-
-    !@givers.empty?
-  end
-
-  def initialize_if_not_existing
-    @givers ||= []
-    @takers ||= []
+    return session_exists_of_type(GIVER_SESSION_TYPE)
   end
 
   def match_for_giver
-    @givers.pop
-    @takers.pop
+    get_first_session_of_type(TAKER_SESSION_TYPE)
   end
 
   def add_giver(chatroom)
-    @givers.push chatroom
+    new_session = Session.create!(topic: self, chatroom: chatroom, session_type: GIVER_SESSION_TYPE)
+    self.sessions.push new_session
+    self.save!
   end
 
   def add_taker(chatroom)
-    @takers.push chatroom
+    new_session = Session.create!(topic: self, chatroom: chatroom, session_type: TAKER_SESSION_TYPE)
+    self.sessions.push new_session
+    self.save!
   end
 
   def match_for_taker
-    @takers.pop
-    @givers.pop
+    get_first_session_of_type(GIVER_SESSION_TYPE)
+  end
+
+  private
+  def get_first_session_of_type(session_type)
+    ordered_sessions = self.sessions.order created_at: :asc
+    ordered_sessions.select { |session| session.session_type == session_type }.first
+  end
+
+  def session_exists_of_type(session_type)
+    self.sessions.each do |session|
+      return true if session.session_type == session_type
+    end
+
+    false
   end
 end
