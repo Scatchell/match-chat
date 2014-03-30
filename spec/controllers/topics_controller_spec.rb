@@ -52,4 +52,5 @@ describe TopicsController do
     response.should redirect_to(first_takers_chatroom)
   end
 
+
 end
