@@ -20,15 +20,17 @@ describe HeartbeatsController do
       Heartbeat.last.user.should == current_user
     end
 
-    # it 'should update the heartbeat time for an already existing user' do
-    #   Heartbeat.create!(user: current_user)
-    #
-    #   expect {
-    #     post :create, {:heartbeat => valid_attributes}, valid_session
-    #   }.to change(Heartbeat, :count).by(0)
-    #
-    #   Heartbeat.last.user.should == current_user
-    # end
+    it 'should update the heartbeat time for an already existing user' do
+      Heartbeat.create!(user: current_user)
+      heartbeat_last_updated_at = Heartbeat.last.updated_at
+
+      expect {
+        post :create, {:heartbeat => valid_attributes}, valid_session
+      }.to change(Heartbeat, :count).by(0)
+
+      Heartbeat.last.user.should == current_user
+      Heartbeat.last.updated_at.should > heartbeat_last_updated_at
+    end
   end
 end
 
