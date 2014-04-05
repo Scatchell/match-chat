@@ -12,7 +12,8 @@
 
 
 <div id="chat">
-  <%= render(@chatroom.messages) %>
+  <%= render(@messages) %>
+  Currently connected users: <%= @users %>
 </div>
 
 <p>
@@ -22,7 +23,28 @@
   <% end %>
 </p>
 
+<!--<p>-->
+<!--<form action="/chatrooms/1/messages" id="heartbeat" method="post">-->
+<!--<input name="content" type="text" value="test"/>-->
+<!--</form>-->
+<!--</p>-->
+
+<p style="visibility: hidden">
+  <%= form_for(Heartbeat.new, remote: true, html: {id: 'heartbeat'}) do |f| %>
+      <%= f.submit 'Send' %>
+  <% end %>
+</p>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#heartbeat").submit();
+    });
+</script>
+
 <%= link_to 'Edit', edit_chatroom_path(@chatroom) %> |
 <%= link_to 'Back', chatrooms_path %>
 
 <%= subscribe_to '/messages/new/' + @chatroom.id.to_s %>
+
+<%= subscribe_to '/user/unsubscribe' %>
+<!--todo find a way to reference the chatting users id here-->

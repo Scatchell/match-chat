@@ -2,12 +2,13 @@ require 'spec_helper'
 
 describe Topic do
   let(:topic) { Topic.new }
+  let(:user) { User.create!(email: 'test@test.test', password: 'password') }
 
   it 'should add givers to a list if no takers exist' do
     chatroom = Chatroom.create!
     topic.giver_has_match?.should == false
 
-    topic.add_giver chatroom
+    topic.add_giver chatroom, user
 
     Session.last.chatroom.should eq(chatroom)
     Session.last.session_type.should eq(Topic::GIVER_SESSION_TYPE)

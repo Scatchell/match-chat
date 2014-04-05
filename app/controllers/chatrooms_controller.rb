@@ -13,6 +13,21 @@ class ChatroomsController < ApplicationController
   # GET /chatrooms/1
   # GET /chatrooms/1.json
   def show
+    @users = @chatroom.users.nil? ? 'none' : @chatroom.users.collect(&:name)
+    @messages = @chatroom.messages.order(:created_at)
+
+    append_chat
+  end
+
+  def append_chat
+    # PrivatePub.publish_to "/messages/new/#{@chatroom.id}", "$('#chat').append('timing...');"
+    #todo also check if have received ping from other user within 10 seconds
+
+    # Thread.new do
+    #   sleep(5)
+    #   puts 'sending...'
+    #   append_chat
+    # end
   end
 
   # GET /chatrooms/new

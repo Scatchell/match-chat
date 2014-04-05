@@ -17,13 +17,15 @@ class Topic < ActiveRecord::Base
     get_first_session_of_type(TAKER_SESSION_TYPE)
   end
 
-  def add_giver(chatroom)
+  def add_giver(chatroom, current_user)
+    chatroom.users = [current_user]
     new_session = Session.create!(topic: self, chatroom: chatroom, session_type: GIVER_SESSION_TYPE)
     self.sessions.push new_session
     self.save!
   end
 
-  def add_taker(chatroom)
+  def add_taker(chatroom, current_user)
+    chatroom.users = [current_user]
     new_session = Session.create!(topic: self, chatroom: chatroom, session_type: TAKER_SESSION_TYPE)
     self.sessions.push new_session
     self.save!

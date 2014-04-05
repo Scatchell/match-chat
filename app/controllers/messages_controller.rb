@@ -10,4 +10,8 @@ class MessagesController < ApplicationController
     @message.user = current_user
     @message.save
   end
+
+  def ping
+    @chatroom = Chatroom.find(params[:chatroom_id])
+  end
 end

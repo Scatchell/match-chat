@@ -3,6 +3,5 @@ class AddSessionReferenceToChatrooms < ActiveRecord::Migration
     change_table(:chatrooms) do |t|
       t.references :session, index: true
     end
-
   end
 end

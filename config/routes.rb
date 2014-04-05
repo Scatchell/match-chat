@@ -22,6 +22,8 @@ MatchChat::Application.routes.draw do
     resources :user
   end
 
+  resources :heartbeats
+
   get '/topics/:id/new_giver', to: 'topics#register_giver', as: 'new_giver'
 
   get '/topics/:id/new_taker', to: 'topics#register_taker', as: 'new_taker'
