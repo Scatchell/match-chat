@@ -1,5 +1,12 @@
-setTimeout(function(){
-    $("#chat").append("heartbeat...");
+//$("#chat").append("heartbeat...");
+if (disconnectTimeout) {
+    clearInterval(disconnectTimeout)
+}
+
+setTimeout(function () {
+    $("#heartbeat").submit();
 }, 1000);
 
-$("#chat").append("heartbeat...");
+var disconnectTimeout = setTimeout(function () {
+    $("#chat").append("<span class='created_at'>[<%= Time.now.strftime('%H:%M') %>]</span>It seems you have disconnected from the server :(");
+}, 5000);
