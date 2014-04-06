@@ -16,7 +16,7 @@ describe Chatroom do
     chatroom.users=[user_with_heartbeat, user_without_heartbeat]
     chatroom.save
 
-    chatroom.disconnected_users
+    chatroom.disconnect_users
     chatroom.users.should == [user_with_heartbeat]
   end
 end

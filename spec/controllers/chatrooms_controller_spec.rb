@@ -8,6 +8,8 @@ describe ChatroomsController do
 
   before { controller.stub(:authenticate_user!).and_return true }
 
+  before { controller.stub(:current_user).and_return User.create!(email: 'test@test.com', password: 'testtest') }
+
   describe 'GET index' do
     it 'assigns all chatrooms as @chatrooms' do
       chatroom = Chatroom.create! valid_attributes

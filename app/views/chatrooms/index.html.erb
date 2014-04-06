@@ -43,7 +43,9 @@
 
 <div id="topics">
   <% @topics.each do |topic| %>
-      <%= topic.name %> <%= link_to 'teach', new_taker_path(topic) %> or <%= link_to 'learn', new_giver_path(topic) %>
+      <% taker_users_available_string = users_available_for(topic.sessions, Topic::GIVER_SESSION_TYPE) ? '(Users are available!)' : ''%>
+      <% giver_users_available_string = users_available_for(topic.sessions, Topic::TAKER_SESSION_TYPE) ? '(Users are available!)' : ''%>
+      <%= topic.name %> <%= link_to 'teach', new_taker_path(topic) %> <%= taker_users_available_string %> or <%= link_to 'learn', new_giver_path(topic) %> <%= giver_users_available_string %>
       <br/>
   <% end %>
 </div>

@@ -9,9 +9,11 @@ class TopicsController < ApplicationController
 
       register_user_with(matching_chatroom)
 
+      alert_chatroom_of_new_user(matching_chatroom)
+
       redirect_to matching_chatroom
     else
-      chatroom = Chatroom.create!(users: [current_user])
+      chatroom = Chatroom.create!
       topic.add_giver chatroom, current_user
       redirect_to chatroom
     end
@@ -24,6 +26,8 @@ class TopicsController < ApplicationController
       matching_chatroom = topic.match_for_taker.chatroom
 
       register_user_with(matching_chatroom)
+
+      alert_chatroom_of_new_user(matching_chatroom)
 
       redirect_to matching_chatroom
     else

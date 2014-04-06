@@ -1,5 +1,5 @@
 class Heartbeat < ActiveRecord::Base
-  DISCONNECT_TIME_SECONDS = 30
+  DISCONNECT_TIME_SECONDS = 10
 
   has_one :user
 

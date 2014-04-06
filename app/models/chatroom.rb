@@ -4,13 +4,17 @@ class Chatroom < ActiveRecord::Base
 
   def self.for_user(current_user)
     # todo how to do a rails query to achieve the following
+    puts 'trying to find user...'
+    p current_user
+
     all.select do |chatroom|
       chatroom.users.include? current_user
     end.first
   end
 
-  def disconnected_users
+  def disconnect_users
     disconnected_users = []
+
     users.each do |user|
       if Heartbeat.for_user(user).nil?
         disconnected_users.push user

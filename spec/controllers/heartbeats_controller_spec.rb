@@ -7,6 +7,7 @@ describe HeartbeatsController do
 
   before { controller.stub(:authenticate_user!).and_return true }
 
+  #stub to keep privatepub from throwing error
   before { controller.stub(:publish_to) }
 
 
@@ -62,6 +63,22 @@ describe HeartbeatsController do
       Heartbeat.count.should == 2
       Heartbeat.all[0].user.should == user_with_old_updated_time
       Heartbeat.all[1].user.should == current_user
+    end
+
+    xit 'should remove an existing session if the sessions only user is disconnected' do
+      user_with_old_updated_time = User.create!({email: 'test2@test.com', password: 'testtest'})
+      chatroom = Chatroom.create!
+      session = Session.create!(session_type: Topic::GIVER_SESSION_TYPE, chatroom: chatroom, user: user_with_old_updated_time)
+      topic = Topic.create! sessions: [session]
+
+      old_updated_time = Time.now
+      Heartbeat.create!(user: user_with_old_updated_time, updated_at: old_updated_time)
+
+      post :create, {:heartbeat => valid_attributes}, valid_session
+
+      user_with_old_updated_time.session.should == nil
+
+      topic.sessions = []
     end
   end
 end

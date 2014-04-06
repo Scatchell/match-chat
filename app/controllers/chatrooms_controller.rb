@@ -13,16 +13,17 @@ class ChatroomsController < ApplicationController
   # GET /chatrooms/1
   # GET /chatrooms/1.json
   def show
+    if !@chatroom.users.include? current_user
+      @chatroom.users.push current_user
+    end
+
+    alert_chatroom_of_new_user(@chatroom)
+
     @users = @chatroom.users.nil? ? 'none' : @chatroom.users.collect(&:name)
     @messages = @chatroom.messages.order(:created_at)
-
-    append_chat
   end
 
   def append_chat
-    # PrivatePub.publish_to "/messages/new/#{@chatroom.id}", "$('#chat').append('timing...');"
-    #todo also check if have received ping from other user within 10 seconds
-
     # Thread.new do
     #   sleep(5)
     #   puts 'sending...'
@@ -81,13 +82,21 @@ class ChatroomsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_chatroom
-      @chatroom = Chatroom.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_chatroom
+    @chatroom = Chatroom.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def chatroom_params
-      params[:chatroom].permit(:title, :description)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def chatroom_params
+    params[:chatroom].permit(:title, :description)
+  end
+
+  private
+  def alert_chatroom_of_new_user(chatroom)
+    message = "<li><span class=\"created_at\">[#{Time.now.strftime('%H:%M')}]</span>#{current_user.name} has connected!</li>"
+
+    PrivatePub.publish_to('/messages/new/' + chatroom.id.to_s,
+                          "$('#chat').append('#{message}');")
+  end
 end
