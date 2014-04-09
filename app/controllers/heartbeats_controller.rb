@@ -1,4 +1,9 @@
 class HeartbeatsController < ApplicationController
+  include HeartbeatsHelper
+  #todo have some errors on production, user is disconnected immediatly
+  #maybe try deleting dev database and starting from scratch, may be some initial heartbeat errors
+  #maybe change times to be a bit longer on production?
+
   def create
     puts 'dub....'
 
@@ -14,17 +19,15 @@ class HeartbeatsController < ApplicationController
     end
 
     #todo put following into scheduler
-    Heartbeat.remove_all_old_users
+    disconnected_users = disconnect_users
 
-    users_chatroom = Chatroom.for_user(current_user)
+    if disconnected_users
+      current_users_chatroom = current_user.chatroom
 
-    disconnected_users = users_chatroom.disconnect_users
-
-
-    disconnected_users.each do |disconnected_user|
-      message = "<li><span class=\"created_at\">[#{Time.now.strftime('%H:%M')}]</span>#{disconnected_user.name} has disconnected</li>"
-
-      publish_to('/messages/new/' + users_chatroom.id.to_s, "$('#chat').append('#{message}');")
+      disconnected_users.each do |user|
+        message = "<li><span class=\"created_at\">[#{Time.now.strftime('%H:%M')}]</span>#{user.name} has disconnected</li>"
+        publish_to('/messages/new/' + current_users_chatroom.id.to_s, "$('#chat').append('#{message}');")
+      end
     end
     #-----------------------------------
 

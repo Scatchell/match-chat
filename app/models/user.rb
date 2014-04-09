@@ -5,4 +5,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :messages
+  belongs_to :chatroom
+  belongs_to :heartbeat
 end

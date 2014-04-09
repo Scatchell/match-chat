@@ -1,5 +1,5 @@
 class Heartbeat < ActiveRecord::Base
-  DISCONNECT_TIME_SECONDS = 30
+  DISCONNECT_TIME_SECONDS = 10
 
   has_one :user
 
@@ -11,8 +11,8 @@ class Heartbeat < ActiveRecord::Base
     end.first
   end
 
-
-  def self.remove_all_old_users
+  def self.remove_all_old_user_heartbeats
+    #todo should chatroom deletion logic go directly here, or should it stay on chatroom?
     all.each do |heartbeat|
       time_since_last_heartbeat = Time.now - heartbeat.updated_at
       if time_since_last_heartbeat > DISCONNECT_TIME_SECONDS

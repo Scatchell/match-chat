@@ -27,7 +27,7 @@ describe TopicsController do
   it 'should redirect a giver to an already existing takers chatroom if they exist' do
     topic = Topic.create! valid_attributes
 
-    taker_chatroom = Chatroom.create!
+    taker_chatroom = Chatroom.create!(session: Session.create!)
 
     topic.add_taker taker_chatroom, current_user
 

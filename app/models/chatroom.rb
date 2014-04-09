@@ -1,12 +1,10 @@
 class Chatroom < ActiveRecord::Base
   has_many :messages
   has_many :users
+  belongs_to :session
 
   def self.for_user(current_user)
     # todo how to do a rails query to achieve the following
-    puts 'trying to find user...'
-    p current_user
-
     all.select do |chatroom|
       chatroom.users.include? current_user
     end.first

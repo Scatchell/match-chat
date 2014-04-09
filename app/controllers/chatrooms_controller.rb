@@ -73,6 +73,8 @@ class ChatroomsController < ApplicationController
   # DELETE /chatrooms/1
   # DELETE /chatrooms/1.json
   def destroy
+    #todo write test for the following comment
+    # @chatroom.sessions.destroy_all
     @chatroom.destroy
 
     respond_to do |format|
