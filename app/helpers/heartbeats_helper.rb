@@ -8,7 +8,9 @@ module HeartbeatsHelper
       disconnected_users.push chatroom.disconnect_users
 
       if chatroom.users.size == 0
-        chatroom.session.destroy
+        if chatroom.session
+          chatroom.session.destroy
+        end
         chatroom.destroy
       end
     end
