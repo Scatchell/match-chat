@@ -15,6 +15,8 @@ module HeartbeatsHelper
       end
     end
 
+    Rails.logger.info disconnected_users.flatten
+
     disconnected_users.flatten
   end
 end

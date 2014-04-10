@@ -49,5 +49,6 @@ gem 'pg'
 gem 'unicorn'
 gem 'rails_12factor'
 gem 'rspec-rails'
+gem 'rufus-scheduler'
 
 ruby '2.0.0'

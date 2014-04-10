@@ -49,7 +49,11 @@ describe HeartbeatsController do
       user_with_old_updated_time = User.create!({email: 'test2@test.com', password: 'testtest'})
       Heartbeat.create!(user: user_with_old_updated_time, updated_at: old_updated_time)
 
-      post :create, {:heartbeat => valid_attributes}, valid_session
+      Heartbeat.create!(user: current_user, updated_at: Time.now)
+
+      expect {
+        disconnect_users
+      }.to change(Heartbeat, :count).by -1
 
       Heartbeat.count.should == 1
       Heartbeat.first.user.should == current_user

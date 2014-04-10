@@ -14,7 +14,7 @@ class Chatroom < ActiveRecord::Base
     disconnected_users = []
 
     users.each do |user|
-      if Heartbeat.for_user(user).nil?
+      if user.heartbeat.nil?
         disconnected_users.push user
         users.delete user
       end

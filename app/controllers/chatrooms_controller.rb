@@ -19,6 +19,7 @@ class ChatroomsController < ApplicationController
 
     alert_chatroom_of_new_user(@chatroom)
 
+    #todo change message to something like "You're the only one here"
     @users = @chatroom.users.nil? ? 'none' : @chatroom.users.collect(&:name)
     @messages = @chatroom.messages.order(:created_at)
   end
