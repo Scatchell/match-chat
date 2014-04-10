@@ -5,9 +5,11 @@ class TopicsController < ApplicationController
     topic = Topic.find(params[:id])
 
     if topic.giver_has_match?
+      #todo refactor following into single topic method
       matching_chatroom = topic.match_for_giver.chatroom
 
       register_user_with(matching_chatroom)
+      #-------------------------------------------------
 
       redirect_to matching_chatroom
     else
