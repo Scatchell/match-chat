@@ -22,6 +22,8 @@ describe ChatroomsController do
   end
 
   describe 'GET show' do
+    before { controller.stub(:alert_chatroom_of_new_user) }
+
     it 'assigns the requested chatroom as @chatroom' do
       chatroom = Chatroom.create! valid_attributes
 

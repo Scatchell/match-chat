@@ -30,14 +30,6 @@ class ChatroomsController < ApplicationController
     @messages = @chatroom.messages.order(:created_at)
   end
 
-  def append_chat
-    # Thread.new do
-    #   sleep(5)
-    #   puts 'sending...'
-    #   append_chat
-    # end
-  end
-
   # GET /chatrooms/new
   def new
     @chatroom = Chatroom.new
