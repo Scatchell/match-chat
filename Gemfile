@@ -50,5 +50,8 @@ gem 'unicorn'
 gem 'rails_12factor'
 gem 'rspec-rails'
 gem 'rufus-scheduler'
+gem 'therubyracer'
+gem 'less-rails'
+gem 'twitter-bootstrap-rails'
 
 ruby '2.0.0'
