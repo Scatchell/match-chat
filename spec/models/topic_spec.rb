@@ -30,7 +30,7 @@ describe Topic do
     topic.add_giver givers_chatroom, user
 
     topic.taker_has_match?.should == true
-    topic.match_for_taker.chatroom.should == givers_chatroom
+    topic.associate_match_for_taker(stub_model(User)).should == givers_chatroom
 
     Session.count.should == 0
   end
@@ -41,7 +41,7 @@ describe Topic do
     topic.add_taker givers_chatroom, user
 
     topic.giver_has_match?.should == true
-    topic.match_for_giver.chatroom.should == givers_chatroom
+    topic.associate_match_for_giver(stub_model(User)).should == givers_chatroom
 
     Session.count.should == 0
   end

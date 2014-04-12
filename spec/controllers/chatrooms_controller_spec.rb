@@ -147,11 +147,15 @@ describe ChatroomsController do
   end
 
   describe 'DELETE destroy' do
-    it 'destroys the requested chatroom' do
+    it 'destroys the requested chatroom and all associated sessions' do
       chatroom = Chatroom.create! valid_attributes
+      Session.create!(chatroom: chatroom)
+
       expect {
         delete :destroy, {:id => chatroom.to_param}, valid_session
       }.to change(Chatroom, :count).by(-1)
+
+      Session.count.should == 0
     end
 
     it 'redirects to the chatrooms list' do

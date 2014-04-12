@@ -13,8 +13,13 @@ class Topic < ActiveRecord::Base
     session_exists_of_type(GIVER_SESSION_TYPE)
   end
 
-  def match_for_giver
-    get_first_session_of_type(TAKER_SESSION_TYPE)
+  def associate_match_for_giver user
+    session = first_session_of_type(TAKER_SESSION_TYPE)
+
+    matching_chatroom = session.chatroom
+    register_user_with_chatroom(user, matching_chatroom)
+
+    matching_chatroom
   end
 
   def add_giver(chatroom, current_user)
@@ -31,12 +36,17 @@ class Topic < ActiveRecord::Base
     self.save!
   end
 
-  def match_for_taker
-    get_first_session_of_type(GIVER_SESSION_TYPE)
+  def associate_match_for_taker user
+    session = first_session_of_type(GIVER_SESSION_TYPE)
+
+    matching_chatroom = session.chatroom
+    register_user_with_chatroom(user, matching_chatroom)
+
+    matching_chatroom
   end
 
   private
-  def get_first_session_of_type(session_type)
+  def first_session_of_type(session_type)
     ordered_sessions = self.sessions.order created_at: :asc
     first_matching_session = ordered_sessions.select { |session| session.session_type == session_type }.first
     first_matching_session.destroy!
@@ -48,5 +58,10 @@ class Topic < ActiveRecord::Base
     end
 
     false
+  end
+
+  private
+  def register_user_with_chatroom(user, matching_chatroom)
+    matching_chatroom.users.push user
   end
 end

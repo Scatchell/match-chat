@@ -25,7 +25,6 @@ class ChatroomsController < ApplicationController
 
     chatrooms_users_names = chatrooms_users.select { |user| user != current_user }.collect(&:name)
 
-    #todo change message to something like "You're the only one here"
     @users = chatrooms_users_names.empty? ? ONLY_USER_MESSAGE : chatrooms_users_names
     @messages = @chatroom.messages.order(:created_at)
   end
@@ -72,8 +71,10 @@ class ChatroomsController < ApplicationController
   # DELETE /chatrooms/1
   # DELETE /chatrooms/1.json
   def destroy
-    #todo write test for the following comment
-    # @chatroom.sessions.destroy_all
+    if @chatroom.session
+      @chatroom.session.destroy
+    end
+
     @chatroom.destroy
 
     respond_to do |format|

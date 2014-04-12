@@ -5,11 +5,7 @@ class TopicsController < ApplicationController
     topic = Topic.find(params[:id])
 
     if topic.giver_has_match?
-      #todo refactor following into single topic method
-      matching_chatroom = topic.match_for_giver.chatroom
-
-      register_user_with(matching_chatroom)
-      #-------------------------------------------------
+      matching_chatroom = topic.associate_match_for_giver(current_user)
 
       redirect_to matching_chatroom
     else
@@ -23,9 +19,7 @@ class TopicsController < ApplicationController
     topic = Topic.find(params[:id])
 
     if topic.taker_has_match?
-      matching_chatroom = topic.match_for_taker.chatroom
-
-      register_user_with(matching_chatroom)
+      matching_chatroom = topic.associate_match_for_taker(current_user)
 
       redirect_to matching_chatroom
     else
@@ -33,10 +27,5 @@ class TopicsController < ApplicationController
       topic.add_taker chatroom, current_user
       redirect_to chatroom
     end
-  end
-
-  private
-  def register_user_with(matching_chatroom)
-    matching_chatroom.users.push current_user
   end
 end

@@ -75,7 +75,6 @@ describe HeartbeatsController do
 
   describe 'removing sessions and chatrooms' do
     it 'should remove an existing session and chatroom if the sessions only user is disconnected' do
-      #todo problem: When a user disconnects and then connects again to another chatroom within the heartbeat time limit, this doesn't disconnect them
       user_with_old_updated_time = User.create!({email: 'test2@test.com', password: 'testtest'})
 
       controller.stub(:current_user).and_return user_with_old_updated_time
@@ -97,11 +96,9 @@ describe HeartbeatsController do
     end
 
     it 'should remove an existing session and chatroom if the user joins a different chatroom' do
-      #todo problem: When a user disconnects and then connects again to another chatroom within the heartbeat time limit, this doesn't disconnect them
       chatroom = Chatroom.create!(users: [current_user])
       Session.create!(session_type: Topic::GIVER_SESSION_TYPE, chatroom: chatroom)
 
-      #todo heartbeat needs to have a chatroom so it can be checked against current users chatroom
       Heartbeat.create!(user: current_user, updated_at: Time.now)
 
       #move user to second chatroom
