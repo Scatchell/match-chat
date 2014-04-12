@@ -83,13 +83,11 @@ describe HeartbeatsController do
       chatroom = Chatroom.create!(users: [user_with_old_updated_time])
 
       #create a session for the above chatroom
-      Session.create!(session_type: Topic::GIVER_SESSION_TYPE, chatroom: chatroom)
+      session = Session.create!(session_type: Topic::GIVER_SESSION_TYPE, chatroom: chatroom)
+      Topic.create!(sessions: [session])
 
       old_updated_time = Time.new(2011, 1, 1, 11, 11, 1, '+09:00')
       Heartbeat.create!(user: user_with_old_updated_time, updated_at: old_updated_time)
-
-      puts '1111'
-      p Chatroom.all
 
       expect {
         disconnect_users
