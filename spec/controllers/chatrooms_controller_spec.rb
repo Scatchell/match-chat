@@ -2,13 +2,15 @@ require 'spec_helper'
 
 describe ChatroomsController do
 
-  let(:valid_attributes) { {  } }
+  let(:valid_attributes) { {} }
 
   let(:valid_session) { {} }
 
   before { controller.stub(:authenticate_user!).and_return true }
 
-  before { controller.stub(:current_user).and_return User.create!(email: 'test@test.com', password: 'testtest') }
+  let(:current_user) { User.create!(email: 'test@test.com', password: 'testtest', name: 'test') }
+
+  before { controller.stub(:current_user).and_return current_user }
 
   describe 'GET index' do
     it 'assigns all chatrooms as @chatrooms' do
@@ -22,8 +24,26 @@ describe ChatroomsController do
   describe 'GET show' do
     it 'assigns the requested chatroom as @chatroom' do
       chatroom = Chatroom.create! valid_attributes
+
       get :show, {:id => chatroom.to_param}, valid_session
       assigns(:chatroom).should eq(chatroom)
+    end
+
+    it 'assigns the requested chatrooms users as @users, not including the current users name' do
+      #todo make name on user manditory
+      #todo extract the long User.create to some common method or helper for these tests
+      user2 = User.create!(email: 'test2@test.com', password: 'testtest', name: 'test2')
+      chatroom = Chatroom.create! users: [current_user, user2]
+
+      get :show, {:id => chatroom.to_param}, valid_session
+      assigns(:users).should eq([user2.name])
+    end
+
+    it 'assigns a string to users when current user is the only user connected' do
+      chatroom = Chatroom.create! users: [current_user]
+
+      get :show, {:id => chatroom.to_param}, valid_session
+      assigns(:users).should eq(ChatroomsController::ONLY_USER_MESSAGE)
     end
   end
 
@@ -67,14 +87,14 @@ describe ChatroomsController do
       it 'assigns a newly created but unsaved chatroom as @chatroom' do
         # Trigger the behavior that occurs when invalid params are submitted
         Chatroom.any_instance.stub(:save).and_return(false)
-        post :create, {:chatroom => {  }}, valid_session
+        post :create, {:chatroom => {}}, valid_session
         assigns(:chatroom).should be_a_new(Chatroom)
       end
 
       it 're-renders the new template' do
         # Trigger the behavior that occurs when invalid params are submitted
         Chatroom.any_instance.stub(:save).and_return(false)
-        post :create, {:chatroom => {  }}, valid_session
+        post :create, {:chatroom => {}}, valid_session
         response.should render_template('new')
       end
     end
@@ -88,8 +108,8 @@ describe ChatroomsController do
         # specifies that the Chatroom created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Chatroom.any_instance.should_receive(:update).with({ 'title' => 'test'})
-        put :update, {:id => chatroom.to_param, :chatroom => { 'title' => 'test'}}, valid_session
+        Chatroom.any_instance.should_receive(:update).with({'title' => 'test'})
+        put :update, {:id => chatroom.to_param, :chatroom => {'title' => 'test'}}, valid_session
       end
 
       it 'assigns the requested chatroom as @chatroom' do
@@ -110,7 +130,7 @@ describe ChatroomsController do
         chatroom = Chatroom.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Chatroom.any_instance.stub(:save).and_return(false)
-        put :update, {:id => chatroom.to_param, :chatroom => {  }}, valid_session
+        put :update, {:id => chatroom.to_param, :chatroom => {}}, valid_session
         assigns(:chatroom).should eq(chatroom)
       end
 
@@ -118,7 +138,7 @@ describe ChatroomsController do
         chatroom = Chatroom.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Chatroom.any_instance.stub(:save).and_return(false)
-        put :update, {:id => chatroom.to_param, :chatroom => {  }}, valid_session
+        put :update, {:id => chatroom.to_param, :chatroom => {}}, valid_session
         response.should render_template('edit')
       end
     end

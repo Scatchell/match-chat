@@ -23,12 +23,6 @@
   <% end %>
 </p>
 
-<!--<p>-->
-<!--<form action="/chatrooms/1/messages" id="heartbeat" method="post">-->
-<!--<input name="content" type="text" value="test"/>-->
-<!--</form>-->
-<!--</p>-->
-
 <p style="visibility: hidden">
   <%= form_for(Heartbeat.new, remote: true, html: {id: 'heartbeat'}) do |f| %>
       <%= f.submit 'Send' %>

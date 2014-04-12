@@ -12,15 +12,21 @@ class ChatroomsController < ApplicationController
 
   # GET /chatrooms/1
   # GET /chatrooms/1.json
+  ONLY_USER_MESSAGE = 'You\'re the only user here at the moment, hopefully someone will join soon.'
+
   def show
-    if !@chatroom.users.include? current_user
-      @chatroom.users.push current_user
+    chatrooms_users = @chatroom.users
+
+    if !chatrooms_users.include? current_user
+      chatrooms_users.push current_user
     end
 
     alert_chatroom_of_new_user(@chatroom)
 
+    chatrooms_users_names = chatrooms_users.select { |user| user != current_user }.collect(&:name)
+
     #todo change message to something like "You're the only one here"
-    @users = @chatroom.users.nil? ? 'none' : @chatroom.users.collect(&:name)
+    @users = chatrooms_users_names.empty? ? ONLY_USER_MESSAGE : chatrooms_users_names
     @messages = @chatroom.messages.order(:created_at)
   end
 
@@ -97,7 +103,7 @@ class ChatroomsController < ApplicationController
 
   private
   def alert_chatroom_of_new_user(chatroom)
-    message = "<li><span class=\"created_at\">[#{Time.now.strftime('%H:%M')}]</span>#{current_user.name} has connected!</li>"
+    message = "<li><span class=\"created_at\">[#{Time.now.strftime('%H:%M')}]</span> #{current_user.name} has connected!</li>"
 
     PrivatePub.publish_to('/messages/new/' + chatroom.id.to_s,
                           "$('#chat').append('#{message}');")

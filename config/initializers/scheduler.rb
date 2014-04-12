@@ -16,7 +16,7 @@ scheduler.every '20s' do
       users_chatroom = user.chatroom
 
       if users_chatroom
-        message = "<li><span class=\"created_at\">[#{Time.now.strftime('%H:%M')}]</span>#{user.name} has disconnected</li>"
+        message = "<li><span class=\"created_at\">[#{Time.now.strftime('%H:%M')}]</span> #{user.name} has disconnected</li>"
         PrivatePub.publish_to('/messages/new/' + users_chatroom.id.to_s, "$('#chat').append('#{message}');")
       end
     end
