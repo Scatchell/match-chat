@@ -34,18 +34,19 @@ describe ChatroomsController do
     it 'assigns the requested chatrooms users as @users, not including the current users name' do
       #todo make name on user manditory
       #todo extract the long User.create to some common method or helper for these tests
-      user2 = User.create!(email: 'test2@test.com', password: 'testtest', name: 'test2')
+      user2 = User.create!(email: 'test2@test.com', password: 'testtest', name: 'user2')
       chatroom = Chatroom.create! users: [current_user, user2]
 
       get :show, {:id => chatroom.to_param}, valid_session
-      assigns(:users).should eq([user2.name])
+      flash[:notice].include?(user2.name).should be_true
+      flash[:notice].include?(current_user.name).should_not be_true
     end
 
     it 'assigns a string to users when current user is the only user connected' do
       chatroom = Chatroom.create! users: [current_user]
 
       get :show, {:id => chatroom.to_param}, valid_session
-      assigns(:users).should eq(ChatroomsController::ONLY_USER_MESSAGE)
+      flash[:notice].include?(ChatroomsController::ONLY_USER_MESSAGE).should be_true
     end
   end
 
