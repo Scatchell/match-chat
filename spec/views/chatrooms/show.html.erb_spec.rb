@@ -15,7 +15,6 @@ describe 'chatrooms/show' do
       render
 
       rendered.should include(@chatroom.title)
-      rendered.should include(@chatroom.description)
     end
 
     it 'should show room with title, previous messages, and user name' do

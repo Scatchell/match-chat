@@ -25,8 +25,10 @@ class ChatroomsController < ApplicationController
 
     chatrooms_users_names = chatrooms_users.select { |user| user != current_user }.collect(&:name)
 
-    @users = chatrooms_users_names.empty? ? ONLY_USER_MESSAGE : chatrooms_users_names
+    users = chatrooms_users_names.empty? ? ONLY_USER_MESSAGE : chatrooms_users_names
     @messages = @chatroom.messages.order(:created_at)
+
+    flash[:notice] = 'Currently connected users: ' + users
   end
 
   # GET /chatrooms/new

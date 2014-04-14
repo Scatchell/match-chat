@@ -1,6 +1,65 @@
 @import "twitter/bootstrap/bootstrap";
-body {padding-top: 40px}
+
+body {
+  padding-top: 40px
+}
+
 @import "twitter/bootstrap/responsive";
+
+.chat-box {
+  height: 350px;
+  max-width: 600px;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+.text-muted {
+  margin: 20px 0;
+  color: #999;
+}
+
+.centered {
+  float: none;
+  margin: 0 auto;
+}
+
+td.expand-table{
+  padding-bottom: 25px;
+  padding-top: 20px;
+}
+
+td.big-font{
+  font-size: 2em;
+}
+
+#topics td{
+  text-align: center;
+}
+
+#chat-input input[type='text']{
+  width: 500px;
+}
+
+#chat-input input{
+  height: 30px;
+}
+
+#instructions{
+  font-size: 1.5em;
+  border: dashed palegoldenrod;
+  padding: 10px;
+}
+
+.instruction-line {
+  margin-bottom: 20px;
+}
 
 // Set the correct sprite paths
 @iconSpritePath: image-url("twitter/bootstrap/glyphicons-halflings.png");
@@ -15,6 +74,7 @@ body {padding-top: 40px}
 
 // Font Awesome
 @import "fontawesome/font-awesome";
+
 
 // Glyphicons
 //@import "twitter/bootstrap/sprites.less";

@@ -45,6 +45,10 @@ class Topic < ActiveRecord::Base
     matching_chatroom
   end
 
+  def create_chatroom
+    Chatroom.create!(title: 'Chatroom for ' + self.name)
+  end
+
   private
   def first_session_of_type(session_type)
     ordered_sessions = self.sessions.order created_at: :asc

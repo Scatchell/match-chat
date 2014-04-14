@@ -8,7 +8,7 @@ en:
       back: "Back"
       cancel: "Cancel"
       confirm: "Are you sure?"
-      destroy: "Delete"
+      destroy: "Leave chatroom"
       new: "New"
       edit: "Edit"
     titles:
