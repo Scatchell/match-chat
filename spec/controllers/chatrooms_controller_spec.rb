@@ -34,15 +34,15 @@ describe ChatroomsController do
       chatroom = create(:chatroom, users: [current_user, user2])
 
       get :show, {:id => chatroom.to_param}, valid_session
-      flash[:notice].include?(user2.name).should be_true
-      flash[:notice].include?(current_user.name).should_not be_true
+      flash[:chat_flash].include?(user2.name).should be_true
+      flash[:chat_flash].include?(current_user.name).should_not be_true
     end
 
     it 'assigns a string to users when current user is the only user connected' do
       chatroom = create(:chatroom, users: [current_user])
 
       get :show, {:id => chatroom.to_param}, valid_session
-      flash[:notice].include?(ChatroomsController::ONLY_USER_MESSAGE).should be_true
+      flash[:chat_flash].include?(ChatroomsController::ONLY_USER_MESSAGE).should be_true
     end
   end
 
@@ -155,10 +155,10 @@ describe ChatroomsController do
       Session.count.should == 0
     end
 
-    it 'redirects to the chatrooms list' do
+    it 'redirects to the topics list' do
       chatroom = create(:chatroom)
       delete :destroy, {:id => chatroom.to_param}, valid_session
-      response.should redirect_to(chatrooms_url)
+      response.should redirect_to(topics_url)
     end
   end
 end

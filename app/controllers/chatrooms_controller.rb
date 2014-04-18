@@ -24,10 +24,10 @@ class ChatroomsController < ApplicationController
 
     chatrooms_users_names = chatrooms_users.select { |user| user != current_user }.collect(&:name)
 
-    users = chatrooms_users_names.empty? ? ONLY_USER_MESSAGE : chatrooms_users_names.to_s
     @messages = @chatroom.messages.order(:created_at)
 
-    flash[:notice] = 'Currently connected users: ' + users
+    currently_connect_users_string = "Currently connected users: <strong>#{chatrooms_users_names.join(', ')}</strong>" unless chatrooms_users_names.nil?
+    flash[:chat_flash] = chatrooms_users_names.empty? ? ONLY_USER_MESSAGE : currently_connect_users_string
   end
 
   # GET /chatrooms/new
@@ -79,7 +79,7 @@ class ChatroomsController < ApplicationController
     @chatroom.destroy
 
     respond_to do |format|
-      format.html { redirect_to chatrooms_url }
+      format.html { redirect_to topics_url }
       format.json { head :no_content }
     end
   end

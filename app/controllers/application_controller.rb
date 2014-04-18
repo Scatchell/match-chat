@@ -10,4 +10,6 @@ class ApplicationController < ActionController::Base
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) << :name
   end
+
+  add_flash_types :chat_flash
 end
