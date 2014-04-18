@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Chatroom do
-  let(:chatroom) { Chatroom.create! }
+  let(:chatroom) { create(:chatroom) }
 
 
   it 'should create a chatroom with a user' do
@@ -9,8 +9,8 @@ describe Chatroom do
   end
 
   it 'should disconnect users who no longer have a heartbeat' do
-    user_with_heartbeat = User.create!({email: 'test@test.com', password: 'testtest'})
-    user_without_heartbeat = User.create!({email: 'test2@test.com', password: 'testtest'})
+    user_with_heartbeat = create(:user)
+    user_without_heartbeat = create(:user)
 
     Heartbeat.create!(user: user_with_heartbeat, updated_at: Time.now)
     chatroom.users=[user_with_heartbeat, user_without_heartbeat]

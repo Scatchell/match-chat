@@ -53,5 +53,7 @@ gem 'rufus-scheduler'
 gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
+gem 'factory_girl'
+gem 'database_cleaner'
 
 ruby '2.0.0'

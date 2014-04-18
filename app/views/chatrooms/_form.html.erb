@@ -1,28 +1,26 @@
-<%= form_for(@chatroom) do |f| %>
-  <% if @chatroom.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@chatroom.errors.count, "error") %> prohibited this chatroom from being saved:</h2>
-
-      <ul>
-      <% @chatroom.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+<%= form_for @chatroom, :html => {:class => 'form-horizontal'} do |f| %>
+    <div class="control-group">
+      <%= f.label :title, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :title, :class => 'text_field' %>
+      </div>
     </div>
-  <% end %>
+    <div class="control-group">
+      <%= f.label :description, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :description, :class => 'text_field' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :session_id, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :session_id, :class => 'text_field' %>
+      </div>
+    </div>
 
-  <div class="actions">
-    <p>
-      <%= f.label :title %><br>
-      <%= f.text_field :title %>
-    </p>
-
-    <p>
-      <%= f.label :description %><br>
-      <%= f.text_area :description %>
-    </p>
-
-    <%= f.submit %>
-  </div>
+    <div class="form-actions">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                  chatrooms_path, :class => 'btn' %>
+    </div>
 <% end %>
-

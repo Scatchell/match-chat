@@ -4,28 +4,26 @@ include HeartbeatsHelper
 
 describe HeartbeatsController do
 
-  let(:valid_attributes) { {} }
-
   let(:valid_session) { {} }
 
   before { controller.stub(:authenticate_user!).and_return true }
 
   before { controller.stub(:publish_to) }
 
-  let(:current_user) { User.create!({email: 'test@test.com', password: 'testtest'}) }
+  let(:current_user) { create(:user) }
 
   before { controller.stub(:current_user).and_return current_user }
 
   let(:session) { Session.create! }
 
   describe 'create and remove heartbeats' do
-    before { Chatroom.create!(users: [current_user], session: session) }
+    before { create(:chatroom, users: [current_user], session: session) }
 
     it 'creates a new heartbeat for the current user' do
-      Chatroom.create!(users: [current_user], session: session)
+      create(:chatroom, users: [current_user], session: session)
 
       expect {
-        post :create, {:heartbeat => valid_attributes}, valid_session
+        post :create, {:heartbeat => attributes_for(:heartbeat)}, valid_session
       }.to change(Heartbeat, :count).by(1)
 
       Heartbeat.last.user.should == current_user
@@ -36,7 +34,7 @@ describe HeartbeatsController do
       heartbeat_last_updated_at = Heartbeat.last.updated_at
 
       expect {
-        post :create, {:heartbeat => valid_attributes}, valid_session
+        post :create, {:heartbeat => attributes_for(:heartbeat)}, valid_session
       }.to change(Heartbeat, :count).by(0)
 
       Heartbeat.last.user.should == current_user
@@ -47,9 +45,9 @@ describe HeartbeatsController do
       old_updated_time = Time.new(2011, 1, 1, 11, 11, 1, '+09:00')
 
       user_with_old_updated_time = User.create!({email: 'test2@test.com', password: 'testtest'})
-      Heartbeat.create!(user: user_with_old_updated_time, updated_at: old_updated_time)
+      create(:heartbeat, user: user_with_old_updated_time, updated_at: old_updated_time)
 
-      Heartbeat.create!(user: current_user, updated_at: Time.now)
+      create(:heartbeat, user: current_user, updated_at: Time.now)
 
       expect {
         disconnect_users
@@ -63,9 +61,9 @@ describe HeartbeatsController do
       old_updated_time = Time.now
 
       user_with_old_updated_time = User.create!({email: 'test2@test.com', password: 'testtest'})
-      Heartbeat.create!(user: user_with_old_updated_time, updated_at: old_updated_time)
+      create(:heartbeat, user: user_with_old_updated_time, updated_at: old_updated_time)
 
-      post :create, {:heartbeat => valid_attributes}, valid_session
+      post :create, {:heartbeat => attributes_for(:heartbeat)}, valid_session
 
       Heartbeat.count.should == 2
       Heartbeat.all[0].user.should == user_with_old_updated_time
@@ -79,14 +77,14 @@ describe HeartbeatsController do
 
       controller.stub(:current_user).and_return user_with_old_updated_time
 
-      chatroom = Chatroom.create!(users: [user_with_old_updated_time])
+      chatroom = create(:chatroom, users: [user_with_old_updated_time])
 
       #create a session for the above chatroom
       session = Session.create!(session_type: Topic::GIVER_SESSION_TYPE, chatroom: chatroom)
       Topic.create!(sessions: [session])
 
       old_updated_time = Time.new(2011, 1, 1, 11, 11, 1, '+09:00')
-      Heartbeat.create!(user: user_with_old_updated_time, updated_at: old_updated_time)
+      create(:heartbeat, user: user_with_old_updated_time, updated_at: old_updated_time)
 
       expect {
         disconnect_users
@@ -96,16 +94,16 @@ describe HeartbeatsController do
     end
 
     it 'should remove an existing session and chatroom if the user joins a different chatroom' do
-      chatroom = Chatroom.create!(users: [current_user])
+      chatroom = create(:chatroom, users: [current_user])
       Session.create!(session_type: Topic::GIVER_SESSION_TYPE, chatroom: chatroom)
 
-      Heartbeat.create!(user: current_user, updated_at: Time.now)
+      create(:heartbeat, user: current_user, updated_at: Time.now)
 
       #move user to second chatroom
-      second_chatroom = Chatroom.create!(users: [current_user])
+      second_chatroom = create(:chatroom, users: [current_user])
       current_user.chatroom.should == second_chatroom
 
-      Heartbeat.create!(user: current_user, updated_at: Time.now)
+      create(:heartbeat, user: current_user, updated_at: Time.now)
 
       expect {
         disconnect_users

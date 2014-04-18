@@ -6,7 +6,6 @@ describe 'chatrooms/show' do
   end
 
 
-
   describe 'message list rendering' do
     it 'should show room with title and description when no messages' do
       message_list = []
@@ -32,22 +31,4 @@ describe 'chatrooms/show' do
       rendered.should include(first_message.content)
     end
   end
-
-  describe 'currently connected users rendering' do
-    #todo change this into a test on the flash message (somehow)
-    xit 'should show currently connected users' do
-      user = stub_model(User, {name: 'test user'})
-
-      message_list = []
-      @messages = assign(:messages, message_list)
-      assign(:users, [user])
-
-      render
-
-      rendered.should include('Currently connected users')
-      rendered.should include(user.name)
-    end
-  end
-
-
 end

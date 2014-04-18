@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Topic do
   let(:topic) { Topic.new }
-  let(:user) { User.create!(email: 'test@test.test', password: 'password') }
+  let(:user) { create(:user) }
 
   it 'should add givers to a list if no takers exist' do
     chatroom = Chatroom.create!

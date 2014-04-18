@@ -6,7 +6,7 @@ MatchChat::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'chatrooms#index'
+  root 'topics#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
@@ -27,6 +27,8 @@ MatchChat::Application.routes.draw do
   get '/topics/:id/new_giver', to: 'topics#register_giver', as: 'new_giver'
 
   get '/topics/:id/new_taker', to: 'topics#register_taker', as: 'new_taker'
+
+  resources :topics, only: [:index]
 
 # Example resource route with options:
 #   resources :products do

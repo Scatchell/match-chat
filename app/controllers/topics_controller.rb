@@ -1,7 +1,11 @@
 class TopicsController < ApplicationController
-  before_action :find_topic
+  before_action :find_topic, only: [:register_giver, :register_taker]
 
   before_filter :authenticate_user!
+
+  def index
+    @topics = Topic.all
+  end
 
   def register_giver
     if @topic.giver_has_match?
