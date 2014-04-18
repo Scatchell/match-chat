@@ -5,7 +5,6 @@ describe 'chatrooms/show' do
     @chatroom = assign(:chatroom, stub_model(Chatroom, {title: 'test title', description: 'test description'}))
   end
 
-
   describe 'message list rendering' do
     it 'should show room with title and description when no messages' do
       message_list = []

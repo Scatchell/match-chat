@@ -14,7 +14,7 @@ describe HeartbeatsController do
 
   before { controller.stub(:current_user).and_return current_user }
 
-  let(:session) { Session.create! }
+  let(:session) { create(:session) }
 
   describe 'create and remove heartbeats' do
     before { create(:chatroom, users: [current_user], session: session) }
@@ -30,7 +30,7 @@ describe HeartbeatsController do
     end
 
     it 'should update the heartbeat time for an already existing user' do
-      Heartbeat.create!(user: current_user)
+      create(:heartbeat, user: current_user)
       heartbeat_last_updated_at = Heartbeat.last.updated_at
 
       expect {
@@ -44,7 +44,7 @@ describe HeartbeatsController do
     it 'should remove heartbeat if their heartbeat is NOT recent' do
       old_updated_time = Time.new(2011, 1, 1, 11, 11, 1, '+09:00')
 
-      user_with_old_updated_time = User.create!({email: 'test2@test.com', password: 'testtest'})
+      user_with_old_updated_time = create(:user)
       create(:heartbeat, user: user_with_old_updated_time, updated_at: old_updated_time)
 
       create(:heartbeat, user: current_user, updated_at: Time.now)
@@ -60,7 +60,7 @@ describe HeartbeatsController do
     it 'should not remove heartbeats if their heartbeat IS recent' do
       old_updated_time = Time.now
 
-      user_with_old_updated_time = User.create!({email: 'test2@test.com', password: 'testtest'})
+      user_with_old_updated_time = create(:user)
       create(:heartbeat, user: user_with_old_updated_time, updated_at: old_updated_time)
 
       post :create, {:heartbeat => attributes_for(:heartbeat)}, valid_session
@@ -73,15 +73,15 @@ describe HeartbeatsController do
 
   describe 'removing sessions and chatrooms' do
     it 'should remove an existing session and chatroom if the sessions only user is disconnected' do
-      user_with_old_updated_time = User.create!({email: 'test2@test.com', password: 'testtest'})
+      user_with_old_updated_time = create(:user)
 
       controller.stub(:current_user).and_return user_with_old_updated_time
 
       chatroom = create(:chatroom, users: [user_with_old_updated_time])
 
       #create a session for the above chatroom
-      session = Session.create!(session_type: Topic::GIVER_SESSION_TYPE, chatroom: chatroom)
-      Topic.create!(sessions: [session])
+      session = create(:session, session_type: Topic::GIVER_SESSION_TYPE, chatroom: chatroom)
+      create(:topic, sessions: [session])
 
       old_updated_time = Time.new(2011, 1, 1, 11, 11, 1, '+09:00')
       create(:heartbeat, user: user_with_old_updated_time, updated_at: old_updated_time)
@@ -95,7 +95,7 @@ describe HeartbeatsController do
 
     it 'should remove an existing session and chatroom if the user joins a different chatroom' do
       chatroom = create(:chatroom, users: [current_user])
-      Session.create!(session_type: Topic::GIVER_SESSION_TYPE, chatroom: chatroom)
+      create(:session, session_type: Topic::GIVER_SESSION_TYPE, chatroom: chatroom)
 
       create(:heartbeat, user: current_user, updated_at: Time.now)
 
