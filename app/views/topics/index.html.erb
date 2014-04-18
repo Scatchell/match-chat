@@ -1,0 +1,32 @@
+<div class="page-header text-center">
+  <h1>Pick your topic of interest below</h1>
+</div>
+
+<div class="span4 centered">
+  <div id="instructions">
+    <div class="instruction-line">
+      <%= smiley_face %> = Users are available to chat
+    </div>
+    <div class="instruction-line">
+      <%= frowny_face %> = No users available yet, but you can still click and wait for a user
+    </div>
+  </div>
+</div>
+
+<div id="topics" class="centered">
+  <div class="span4 centered">
+    <table class="table">
+      <tbody>
+      <% @topics.each do |topic| %>
+          <% taker_users_available = users_available_for(topic.sessions, Topic::GIVER_SESSION_TYPE) %>
+          <% giver_users_available = users_available_for(topic.sessions, Topic::TAKER_SESSION_TYPE) %>
+          <tr>
+            <td class="expand-table big-font"><%= topic.name.capitalize %></td>
+            <td class="expand-table big-font"><%= link_to 'teach', new_taker_path(topic) %> <%= taker_users_available ? smiley_face : frowny_face %></td>
+            <td class="expand-table big-font"><%= link_to 'learn', new_giver_path(topic) %> <%= giver_users_available ? smiley_face : frowny_face %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
