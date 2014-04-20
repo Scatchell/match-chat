@@ -18,6 +18,10 @@ FactoryGirl.define do
   factory :heartbeat do
 
   end
+
+  factory :message do
+
+  end
 end
 
 RSpec.configure do |config|

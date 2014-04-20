@@ -33,8 +33,8 @@
   </script>
 
   <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              chatroom_path(@chatroom),
-              :method => 'delete',
+              end_chat_path(@chatroom),
+              :method => 'put',
               :data => {:confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure you want to leave the chat?'))},
               :class => 'btn btn-danger' %>
 

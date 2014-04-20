@@ -11,11 +11,19 @@ describe ChatroomsController do
   before { controller.stub(:current_user).and_return current_user }
 
   describe 'GET index' do
-    it 'assigns all chatrooms as @chatrooms' do
+    it 'should assign all chatrooms as @chatrooms' do
       chatroom = create(:chatroom)
       chatroom2 = create(:chatroom)
       get :index, {}, valid_session
       assigns(:chatrooms).to_a.should eq([chatroom, chatroom2])
+    end
+
+    it 'should assign only chatrooms without an ending time as @chatrooms' do
+      chatroom = create(:chatroom)
+      create(:chatroom, ended_at: Time.now)
+
+      get :index, {}, valid_session
+      assigns(:chatrooms).to_a.should eq([chatroom])
     end
   end
 
@@ -149,7 +157,7 @@ describe ChatroomsController do
       create(:session, chatroom: chatroom)
 
       expect {
-        delete :destroy, {:id => chatroom.to_param}, valid_session
+        delete :destroy, {id: chatroom.to_param}, valid_session
       }.to change(Chatroom, :count).by(-1)
 
       Session.count.should == 0
@@ -157,8 +165,23 @@ describe ChatroomsController do
 
     it 'redirects to the topics list' do
       chatroom = create(:chatroom)
-      delete :destroy, {:id => chatroom.to_param}, valid_session
+      delete :destroy, {id: chatroom.to_param}, valid_session
       response.should redirect_to(topics_url)
+    end
+  end
+
+  describe 'PUT end chat' do
+    it 'should update a chats ended at time' do
+      chatroom = create(:chatroom)
+
+      chatroom.ended_at.should == nil
+
+      expected_chatroom_ended_at_time = Time.local(2011, 1, 1, 11, 1, 1)
+      Timecop.freeze(expected_chatroom_ended_at_time)
+
+      put :end_chat, {id: chatroom.to_param}, valid_session
+
+      Chatroom.last.ended_at.should == expected_chatroom_ended_at_time
     end
   end
 end

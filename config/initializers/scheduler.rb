@@ -6,14 +6,17 @@ scheduler = Rufus::Scheduler.singleton
 
 include HeartbeatsHelper
 
-scheduler.every '20s' do
+scheduler.every '5s' do
   Rails.logger.info 'Scheduler looking for disconnected users...'
 
   disconnected_users = disconnect_users
+
   if disconnected_users
 
     disconnected_users.each do |user|
       users_chatroom = user.chatroom
+
+      Rails.logger.info "Disconnecting user #{user.name} with id #{user.id} from chatroom with id #{users_chatroom.id}"
 
       if users_chatroom
         message = "<li><span class=\"created_at\">[#{Time.now.strftime('%H:%M')}]</span> #{user.name} has disconnected</li>"

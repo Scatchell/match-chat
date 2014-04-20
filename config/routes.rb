@@ -18,6 +18,8 @@ MatchChat::Application.routes.draw do
     resources :messages
   end
 
+  put '/end_chat/:id', to: 'chatrooms#end_chat', as: 'end_chat'
+
   resources :messages do
     resources :user
   end

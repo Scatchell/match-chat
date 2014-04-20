@@ -4,14 +4,14 @@ module HeartbeatsHelper
 
     disconnected_users = []
 
-    Chatroom.all.each do |chatroom|
+    puts 'activechatrooms'
+    p Chatroom.active.to_a
+
+    Chatroom.active.each do |chatroom|
       disconnected_users.push chatroom.disconnect_users
 
       if chatroom.users.size == 0
-        if chatroom.session
-          chatroom.session.destroy
-        end
-        chatroom.destroy
+        chatroom.end_at Time.now
       end
     end
 

@@ -30,15 +30,20 @@ describe HeartbeatsController do
     end
 
     it 'should update the heartbeat time for an already existing user' do
+      heartbeat_last_updated_at = Time.local(2011, 1, 1, 11, 1, 1)
+      Timecop.freeze(heartbeat_last_updated_at)
+
       create(:heartbeat, user: current_user)
-      heartbeat_last_updated_at = Heartbeat.last.updated_at
+
+      new_updated_at_time = Time.local(2011, 1, 1, 11, 1, 1)
+      Timecop.freeze(new_updated_at_time)
 
       expect {
         post :create, {:heartbeat => attributes_for(:heartbeat)}, valid_session
       }.to change(Heartbeat, :count).by(0)
 
       Heartbeat.last.user.should == current_user
-      Heartbeat.last.updated_at.should > heartbeat_last_updated_at
+      Heartbeat.last.updated_at.should == new_updated_at_time
     end
 
     it 'should remove heartbeat if their heartbeat is NOT recent' do
@@ -88,7 +93,7 @@ describe HeartbeatsController do
 
       expect {
         disconnect_users
-      }.to change(Chatroom, :count).by(-1)
+      }.to change{Chatroom.active.count}.by(-1)
 
       Topic.last.sessions.should == []
     end
@@ -107,10 +112,10 @@ describe HeartbeatsController do
 
       expect {
         disconnect_users
-      }.to change(Chatroom, :count).by(-1)
+      }.to change{Chatroom.active.count}.by(-1)
 
-      Chatroom.first.should == second_chatroom
-      Chatroom.all.size.should == 1
+      Chatroom.active.first.should == second_chatroom
+      Chatroom.active.count.should == 1
     end
   end
 end

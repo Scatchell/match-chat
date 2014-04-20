@@ -64,9 +64,19 @@ describe TopicsController do
   it 'should redirect to the first taker if there are multiple existing' do
     topic = create(:topic)
 
+    earliest_time = Time.local(2011, 1, 1, 11, 1, 1)
+    later_time = Time.local(2011, 1, 1, 12, 1, 1)
+    latest_time = Time.local(2011, 1, 1, 13, 1, 1)
+
     first_takers_chatroom = create(:chatroom)
+
+    Timecop.freeze(earliest_time)
     topic.add_taker first_takers_chatroom, current_user
+
+    Timecop.freeze(later_time)
     topic.add_taker create(:chatroom), current_user
+
+    Timecop.freeze(latest_time)
     topic.add_taker create(:chatroom), current_user
 
     get :register_giver, {id: topic.to_param}, valid_session

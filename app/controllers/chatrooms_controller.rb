@@ -1,12 +1,12 @@
 class ChatroomsController < ApplicationController
-  before_action :set_chatroom, only: [:show, :edit, :update, :destroy]
+  before_action :set_chatroom, only: [:show, :edit, :update, :destroy, :end_chat]
 
   before_filter :authenticate_user!, only: [:create, :new, :update, :destroy, :show]
 
   # GET /chatrooms
   # GET /chatrooms.json
   def index
-    @chatrooms = Chatroom.all
+    @chatrooms = Chatroom.active
   end
 
   # GET /chatrooms/1
@@ -72,11 +72,17 @@ class ChatroomsController < ApplicationController
   # DELETE /chatrooms/1
   # DELETE /chatrooms/1.json
   def destroy
-    if @chatroom.session
-      @chatroom.session.destroy
-    end
-
     @chatroom.destroy
+
+    respond_to do |format|
+      format.html { redirect_to topics_url }
+      format.json { head :no_content }
+    end
+  end
+
+  def end_chat
+    #todo this is commented out to allow the scheduler to disconnect users so disconnect messages will work - there a better way?
+    # @chatroom.end_at Time.now
 
     respond_to do |format|
       format.html { redirect_to topics_url }
