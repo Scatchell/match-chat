@@ -48,4 +48,10 @@ describe Chatroom do
 
     chatroom.duration.should == second_message_time - first_message_time
   end
+
+  it 'should show 0 seconds for a chat with no messages' do
+    chatroom = create(:chatroom)
+
+    chatroom.duration.should == 0
+  end
 end

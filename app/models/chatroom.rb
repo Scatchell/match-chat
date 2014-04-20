@@ -21,7 +21,8 @@ class Chatroom < ActiveRecord::Base
   end
 
   def duration
-    sorted_messages = messages.sort {|x, y| x.created_at <=> y.created_at}
+    return 0 if messages.empty?
+    sorted_messages = messages.sort { |x, y| x.created_at <=> y.created_at }
     sorted_messages.last.created_at - sorted_messages.first.created_at
   end
 
