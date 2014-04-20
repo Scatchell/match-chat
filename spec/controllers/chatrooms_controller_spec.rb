@@ -171,7 +171,7 @@ describe ChatroomsController do
   end
 
   describe 'PUT end chat' do
-    it 'should update a chats ended at time' do
+    it 'should not update a chats ended at time' do
       chatroom = create(:chatroom)
 
       chatroom.ended_at.should == nil
@@ -181,7 +181,7 @@ describe ChatroomsController do
 
       put :end_chat, {id: chatroom.to_param}, valid_session
 
-      Chatroom.last.ended_at.should == expected_chatroom_ended_at_time
+      Chatroom.last.ended_at.should be_nil
     end
   end
 end
