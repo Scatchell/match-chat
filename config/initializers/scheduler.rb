@@ -6,7 +6,7 @@ scheduler = Rufus::Scheduler.singleton
 
 include HeartbeatsHelper
 
-scheduler.every '5s' do
+scheduler.every '20s' do
   Rails.logger.info 'Scheduler looking for disconnected users...'
 
   disconnected_users = disconnect_users
