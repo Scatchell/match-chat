@@ -4,9 +4,6 @@ module HeartbeatsHelper
 
     disconnected_users = []
 
-    puts 'activechatrooms'
-    p Chatroom.active.to_a
-
     Chatroom.active.each do |chatroom|
       disconnected_users.push chatroom.disconnect_users
 

@@ -7,6 +7,8 @@ class Chatroom < ActiveRecord::Base
   scope :active, -> { where ended_at: nil }
   scope :inactive, -> { all.where('ended_at IS NOT NULL') }
 
+  TIME_INTERVAL_IN_MINUTES = 1
+
   def disconnect_users
     disconnected_users = []
 
@@ -22,7 +24,12 @@ class Chatroom < ActiveRecord::Base
 
   def duration
     return 0 if messages.empty?
+
     sorted_messages = messages.sort { |x, y| x.created_at <=> y.created_at }
+    p sorted_messages
+    p sorted_messages.last
+    puts 'minus'
+    p sorted_messages.first
     sorted_messages.last.created_at - sorted_messages.first.created_at
   end
 
@@ -30,6 +37,23 @@ class Chatroom < ActiveRecord::Base
     destroy_sessions
     self.ended_at = ending_time
     self.save
+  end
+
+  def next_time_reached
+    return false if self.intervals_passed == current_intervals_passed
+
+    Rails.logger.info "Changing intervals to: #{current_intervals_passed}"
+    self.intervals_passed = current_intervals_passed
+    self.save
+
+    true
+  end
+
+  def current_intervals_passed
+    minutes_passed = duration / 60
+    intervals_passed = minutes_passed / TIME_INTERVAL_IN_MINUTES
+    Rails.logger.info "intervals_passed are: #{intervals_passed}"
+    (intervals_passed).to_i
   end
 
   private

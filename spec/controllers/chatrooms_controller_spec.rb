@@ -181,7 +181,9 @@ describe ChatroomsController do
 
       put :end_chat, {id: chatroom.to_param}, valid_session
 
-      Chatroom.last.ended_at.should be_nil
+      disconnect_users
+
+      Chatroom.last.ended_at.should == expected_chatroom_ended_at_time
     end
   end
 end

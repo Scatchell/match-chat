@@ -11,6 +11,8 @@ describe TopicsController do
   before { controller.stub(:current_user).and_return current_user }
 
   it 'should list all topics in the index route' do
+    Topic.destroy_all
+
     topic = create(:topic)
     topic2 = create(:topic)
 
