@@ -1,4 +1,5 @@
 class ChatroomsController < ApplicationController
+  include PublishMessagesHelper
   before_action :set_chatroom, only: [:show, :edit, :update, :destroy, :end_chat]
 
   before_filter :authenticate_user!, only: [:create, :new, :update, :destroy, :show]
@@ -20,7 +21,7 @@ class ChatroomsController < ApplicationController
       chatrooms_users.push current_user
     end
 
-    alert_chatroom_of_new_user(@chatroom)
+    send_new_user_alert_for(current_user, @chatroom)
 
     chatrooms_users_names = chatrooms_users.select { |user| user != current_user }.collect(&:name)
 
@@ -99,13 +100,5 @@ class ChatroomsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def chatroom_params
     params[:chatroom].permit(:title, :description)
-  end
-
-  private
-  def alert_chatroom_of_new_user(chatroom)
-    message = "<li><span class=\"created_at\">[#{Time.now.strftime('%H:%M')}]</span> #{current_user.name} has connected!</li>"
-
-    PrivatePub.publish_to('/messages/new/' + chatroom.id.to_s,
-                          "$('#chat').append('#{message}');")
   end
 end

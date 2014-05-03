@@ -28,7 +28,7 @@ describe ChatroomsController do
   end
 
   describe 'GET show' do
-    before { controller.stub(:alert_chatroom_of_new_user) }
+    before { controller.stub(:send_new_user_alert_for) }
 
     it 'assigns the requested chatroom as @chatroom' do
       chatroom = create(:chatroom)
