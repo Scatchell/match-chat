@@ -118,4 +118,79 @@ describe HeartbeatsController do
       Chatroom.active.count.should == 1
     end
   end
+
+  describe 'altering minutes of users based on chat duration' do
+
+    it 'should subtract one minute when heartbeat occurs' do
+      chatroom = create(:chatroom, users: [current_user])
+
+      first_message_time = Time.local(2011, 1, 1, 11, 1, 1)
+      Timecop.freeze(first_message_time)
+      create(:heartbeat, user: current_user, updated_at: Time.now)
+      message1 = create(:message, user: current_user, updated_at: Time.now)
+
+      second_message_time = Time.local(2011, 1, 1, 11, 2, 1)
+      Timecop.freeze(second_message_time)
+      message2 = create(:message, user: current_user)
+
+      chatroom.messages = [message1, message2]
+
+      chatroom.duration.should == 60
+
+      expect {
+        post :create, {:heartbeat => attributes_for(:heartbeat)}, valid_session
+      }.to change{current_user.minutes}.by(-1)
+    end
+
+
+    it 'should subtract 5 minute when heartbeat occurs' do
+      chatroom = create(:chatroom, users: [current_user])
+
+      first_message_time = Time.local(2011, 1, 1, 11, 1, 1)
+      Timecop.freeze(first_message_time)
+      create(:heartbeat, user: current_user, updated_at: Time.now)
+      message1 = create(:message, user: current_user, updated_at: Time.now)
+
+      second_message_time = Time.local(2011, 1, 1, 11, 6, 1)
+      Timecop.freeze(second_message_time)
+      message2 = create(:message, user: current_user)
+
+      chatroom.messages = [message1, message2]
+
+      chatroom.duration.should == 60 * 5
+
+      expect {
+        post :create, {:heartbeat => attributes_for(:heartbeat)}, valid_session
+      }.to change{current_user.minutes}.by(-5)
+    end
+
+    it 'should only subtract intervals passed since last heartbeat' do
+      chatroom = create(:chatroom, users: [current_user])
+
+      first_message_time = Time.local(2011, 1, 1, 11, 1, 1)
+      Timecop.freeze(first_message_time)
+      create(:heartbeat, user: current_user, updated_at: Time.now)
+      message1 = create(:message, user: current_user, updated_at: Time.now)
+
+      second_message_time = Time.local(2011, 1, 1, 11, 2, 1)
+      Timecop.freeze(second_message_time)
+      message2 = create(:message, user: current_user)
+
+      chatroom.messages = [message1, message2]
+
+      #update intervals passed to emulate heartbeat
+      chatroom.update_intervals
+
+      #message with 3 min difference from first message, but 2 min difference from second message
+      third_message_time = Time.local(2011, 1, 1, 11, 4, 1)
+      Timecop.freeze(third_message_time)
+      message3 = create(:message, user: current_user)
+
+      chatroom.messages.push message3
+
+      expect {
+        post :create, {:heartbeat => attributes_for(:heartbeat)}, valid_session
+      }.to change{current_user.minutes}.by(-2)
+    end
+  end
 end

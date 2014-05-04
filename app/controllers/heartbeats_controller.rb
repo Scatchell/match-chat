@@ -8,6 +8,9 @@ class HeartbeatsController < ApplicationController
     current_user_chatroom = current_user.chatroom
 
     if current_user_chatroom.next_time_reached
+      intervals_since_last_checked = current_user_chatroom.current_intervals_passed - current_user_chatroom.intervals_passed
+      current_user.minutes -= intervals_since_last_checked
+      current_user_chatroom.update_intervals
       send_time_interval_alert_to(current_user_chatroom)
     end
 

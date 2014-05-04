@@ -59,7 +59,7 @@
 
           <ul class="nav navbar-nav navbar-right" style="float: right">
             <% if user_signed_in? %>
-                <li><a>Welcome <%= current_user.name %>!</a></li>
+                <li><a>Welcome <li><%= link_to current_user.name + '!', current_user %></li></a></li>
                 <li><a> => </a></li>
                 <li><%= link_to('Logout', destroy_user_session_path, :method => :delete) %></li>
             <% else %>

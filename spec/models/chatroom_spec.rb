@@ -96,7 +96,7 @@ describe Chatroom do
       one_interval_later = Time.local(2011, 1, 1, 11, 0 + Chatroom::TIME_INTERVAL_IN_MINUTES, 1)
       create(:message, created_at: one_interval_later, chatroom: chatroom)
 
-      chatroom.next_time_reached
+      chatroom.update_intervals
 
       one_and_a_half_intervals_later = Time.local(2011, 1, 1, 11, 0 + Chatroom::TIME_INTERVAL_IN_MINUTES, 31)
       create(:message, created_at: one_and_a_half_intervals_later, chatroom: chatroom)

@@ -26,10 +26,6 @@ class Chatroom < ActiveRecord::Base
     return 0 if messages.empty?
 
     sorted_messages = messages.sort { |x, y| x.created_at <=> y.created_at }
-    p sorted_messages
-    p sorted_messages.last
-    puts 'minus'
-    p sorted_messages.first
     sorted_messages.last.created_at - sorted_messages.first.created_at
   end
 
@@ -40,13 +36,13 @@ class Chatroom < ActiveRecord::Base
   end
 
   def next_time_reached
-    return false if self.intervals_passed == current_intervals_passed
+    self.intervals_passed != current_intervals_passed
+  end
 
+  def update_intervals
     Rails.logger.info "Changing intervals to: #{current_intervals_passed}"
     self.intervals_passed = current_intervals_passed
     self.save
-
-    true
   end
 
   def current_intervals_passed
