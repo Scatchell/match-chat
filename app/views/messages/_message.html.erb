@@ -1,6 +1,6 @@
 <!--todo make messages look nicer - distinct user name with bold or colors (different for each user)-->
 <li>
   <span class='created_at'>[<%= message.created_at.strftime('%H:%M') %>]</span>
-  <span><%= message.user.name %>: </span>
+  <span class='user_name'><%= message.user.name %>: </span>
   <%= message.content %>
 </li>

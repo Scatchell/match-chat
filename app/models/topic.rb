@@ -23,6 +23,7 @@ class Topic < ActiveRecord::Base
   end
 
   def add_giver(chatroom, current_user)
+    #todo will need to have giver/taker type on a user, to allow for changing of message colors and eventual different logic for takers/givers
     chatroom.users = [current_user]
     new_session = Session.create!(topic: self, chatroom: chatroom, session_type: GIVER_SESSION_TYPE)
     self.sessions.push new_session
