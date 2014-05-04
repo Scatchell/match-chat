@@ -21,8 +21,10 @@ MatchChat::Application.routes.draw do
   put '/end_chat/:id', to: 'chatrooms#end_chat', as: 'end_chat'
 
   resources :messages do
-    resources :user
+    resources :users
   end
+
+  resources :users, only: [:show, :edit, :destroy]
 
   resources :heartbeats
 

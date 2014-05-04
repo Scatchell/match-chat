@@ -161,7 +161,7 @@ describe HeartbeatsController do
 
       expect {
         post :create, {:heartbeat => attributes_for(:heartbeat)}, valid_session
-      }.to change{current_user.minutes}.by(-5)
+      }.to change{User.find(current_user.id).minutes}.by(-5)
     end
 
     it 'should only subtract intervals passed since last heartbeat' do
@@ -190,7 +190,7 @@ describe HeartbeatsController do
 
       expect {
         post :create, {:heartbeat => attributes_for(:heartbeat)}, valid_session
-      }.to change{current_user.minutes}.by(-2)
+      }.to change{User.find(current_user.id).minutes}.by(-2)
     end
   end
 end
