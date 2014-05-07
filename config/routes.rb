@@ -32,7 +32,7 @@ MatchChat::Application.routes.draw do
 
   get '/topics/:id/new_taker', to: 'topics#register_taker', as: 'new_taker'
 
-  resources :topics, only: [:index]
+  resources :topics, only: [:index, :show]
 
 # Example resource route with options:
 #   resources :products do

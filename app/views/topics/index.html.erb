@@ -18,12 +18,12 @@
     <table class="table">
       <tbody>
       <% @topics.each do |topic| %>
-          <% taker_users_available = users_available_for(topic.sessions, Topic::GIVER_SESSION_TYPE) %>
-          <% giver_users_available = users_available_for(topic.sessions, Topic::TAKER_SESSION_TYPE) %>
+          <% taker_users_available = users_available_for(topic.sessions, Session::GIVER_SESSION_TYPE) %>
+          <% giver_users_available = users_available_for(topic.sessions, Session::TAKER_SESSION_TYPE) %>
           <tr>
-            <td class="expand-table big-font"><%= topic.name.capitalize %></td>
-            <td class="expand-table big-font"><%= link_to 'teach', new_taker_path(topic) %> <%= taker_users_available ? smiley_face : frowny_face %></td>
-            <td class="expand-table big-font"><%= link_to 'learn', new_giver_path(topic) %> <%= giver_users_available ? smiley_face : frowny_face %></td>
+            <td class="expand-table big-font"><%= link_to topic.name.capitalize, topic %></td>
+            <td class="expand-table big-font"><%= link_to 'teach', new_giver_path(topic) %> <%= giver_users_available ? smiley_face : frowny_face %></td>
+            <td class="expand-table big-font"><%= link_to 'learn', new_taker_path(topic) %> <%= taker_users_available ? smiley_face : frowny_face %></td>
           </tr>
       <% end %>
       </tbody>

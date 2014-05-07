@@ -86,5 +86,47 @@ describe TopicsController do
     response.should redirect_to(first_takers_chatroom)
   end
 
+  it 'should assign all taker names correctly' do
+    topic = create(:topic)
+
+    first_user = create(:user)
+    chatroom = create(:chatroom)
+    topic.add_taker chatroom, first_user
+
+    second_user = create(:user)
+    second_chatroom = create(:chatroom)
+    topic.add_taker second_chatroom, second_user
+
+    user_that_is_not_taker = create(:user, name: 'non taker user')
+    third_chatroom = create(:chatroom)
+    topic.add_giver third_chatroom, user_that_is_not_taker
+
+    get :show, {id: topic.id}, valid_session
+    assigns(:all_takers).should =~ [first_user, second_user]
+  end
+
+  it 'should register a giver to a particular taker' do
+    topic = create(:topic)
+
+    earliest_time = Time.local(2011, 1, 1, 11, 1, 1)
+    later_time = Time.local(2011, 1, 1, 12, 1, 1)
+    latest_time = Time.local(2011, 1, 1, 13, 1, 1)
+
+    second_takers_chatroom = create(:chatroom)
+
+    Timecop.freeze(earliest_time)
+    topic.add_taker create(:chatroom), current_user
+
+    Timecop.freeze(later_time)
+    topic.add_taker second_takers_chatroom, current_user
+    session_for_second_taker = second_takers_chatroom.session
+
+    Timecop.freeze(latest_time)
+    topic.add_taker create(:chatroom), current_user
+
+    get :register_giver, {id: topic.to_param, session_id: session_for_second_taker.id}, valid_session
+
+    response.should redirect_to(second_takers_chatroom)
+  end
 
 end

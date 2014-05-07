@@ -1,5 +1,5 @@
 class TopicsController < ApplicationController
-  before_action :find_topic, only: [:register_giver, :register_taker]
+  before_action :find_topic, except: [:index]
 
   before_filter :authenticate_user!
 
@@ -8,14 +8,20 @@ class TopicsController < ApplicationController
   end
 
   def register_giver
-    if @topic.giver_has_match?
-      matching_chatroom = @topic.associate_match_for_giver(current_user)
+    if params[:session_id]
+      matching_chatroom = @topic.associate_match_for_giver(current_user, Session.find(params[:session_id]))
 
       redirect_to matching_chatroom
     else
-      chatroom = @topic.create_chatroom
-      @topic.add_giver chatroom, current_user
-      redirect_to chatroom
+      if @topic.giver_has_match?
+        matching_chatroom = @topic.associate_match_for_giver(current_user)
+
+        redirect_to matching_chatroom
+      else
+        chatroom = @topic.create_chatroom
+        @topic.add_giver chatroom, current_user
+        redirect_to chatroom
+      end
     end
   end
 
@@ -29,6 +35,10 @@ class TopicsController < ApplicationController
       @topic.add_taker chatroom, current_user
       redirect_to chatroom
     end
+  end
+
+  def show
+    @all_takers = @topic.all_takers
   end
 
   private

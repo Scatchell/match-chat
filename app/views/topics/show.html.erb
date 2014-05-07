@@ -1,0 +1,24 @@
+<%- model_class = Topic -%>
+<div class="page-header">
+  <h1><%= t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong>Topic name:</strong></dt>
+  <dd><%= @topic.name.capitalize %></dd>
+  <dt><strong>Current users waiting:</strong></dt>
+  <dd>
+    <ul>
+      <% @all_takers.each do |taker| %>
+          <li><%= link_to taker.name, new_giver_path(@topic, session_id: taker.chatroom.session.id.to_s) %></li>
+      <% end %>
+    </ul>
+  </dd>
+</dl>
+
+
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              topics_path, :class => 'btn' %>
+</div>

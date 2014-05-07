@@ -4,6 +4,8 @@ class ChatroomsController < ApplicationController
 
   before_filter :authenticate_user!, only: [:create, :new, :update, :destroy, :show]
 
+  ONLY_USER_MESSAGE = 'You\'re the only user here at the moment, hopefully someone will join soon.'
+
   # GET /chatrooms
   # GET /chatrooms.json
   def index
@@ -12,8 +14,6 @@ class ChatroomsController < ApplicationController
 
   # GET /chatrooms/1
   # GET /chatrooms/1.json
-  ONLY_USER_MESSAGE = 'You\'re the only user here at the moment, hopefully someone will join soon.'
-
   def show
     chatrooms_users = @chatroom.users
 
