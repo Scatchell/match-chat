@@ -10,7 +10,9 @@
   <dd>
     <ul>
       <% @all_takers.each do |taker| %>
-          <li><%= link_to taker.name, new_giver_path(@topic, session_id: taker.chatroom.session.id.to_s) %></li>
+          <li><strong><%= taker.name %> </strong> has question:
+            <em><%= taker.chatroom.session.question %></em>, <%= link_to 'answer?', new_giver_path(@topic, session_id: taker.chatroom.session.id.to_s), method: :post %>
+          </li>
       <% end %>
     </ul>
   </dd>

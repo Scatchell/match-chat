@@ -28,9 +28,11 @@ MatchChat::Application.routes.draw do
 
   resources :heartbeats
 
-  get '/topics/:id/new_giver', to: 'topics#register_giver', as: 'new_giver'
+  post '/topics/:id/new_giver', to: 'topics#register_giver', as: 'new_giver'
 
-  get '/topics/:id/new_taker', to: 'topics#register_taker', as: 'new_taker'
+  post '/topics/:id/new_taker', to: 'topics#register_taker', as: 'new_taker'
+
+  get '/topics/:id/add_question', to: 'topics#add_question', as: 'add_question'
 
   resources :topics, only: [:index, :show]
 

@@ -1,4 +1,4 @@
-<%- model_class = Chatroom #todo make this giver/learner text               -%>
+<%- model_class = Chatroom #todo make this giver/learner text                -%>
 
 <div class="page-header">
   <h1><%= t '.title', :default => model_class.model_name.human.titleize %></h1>
@@ -7,6 +7,8 @@
 <div id="chatroom-info" class="span9">
   <span><strong><%= model_class.human_attribute_name(:title) %>:</strong></span>
   <span><%= @chatroom.title %></span>
+  <span><strong>Question:</strong></span>
+  <span><%= @session_question.nil? ? 'No specific question for this chat' : @session_question %></span>
 </div>
 
 <div class="span7">

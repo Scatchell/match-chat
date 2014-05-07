@@ -27,6 +27,8 @@ class ChatroomsController < ApplicationController
 
     @messages = @chatroom.messages.order(:created_at)
 
+    @session_question = params[:question]
+
     currently_connect_users_string = "Currently connected users: <strong>#{chatrooms_users_names.join(', ')}</strong>" unless chatrooms_users_names.nil?
     flash[:chat_flash] = chatrooms_users_names.empty? ? ONLY_USER_MESSAGE : currently_connect_users_string
   end

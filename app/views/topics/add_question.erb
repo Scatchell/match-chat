@@ -1,0 +1,14 @@
+<div class="page-header text-center">
+  <h1>Add a question</h1>
+</div>
+
+<div id="topics" class="centered">
+  <div class="span4 centered">
+    Have a specific question you want to ask about? Put it here:
+    <%= form_tag(new_taker_path(@topic), method: 'post') do %>
+        <%= label_tag(:question, 'Question:') %>
+        <%= text_field_tag(:question) %>
+        <%= submit_tag('Continue') %>
+    <% end %>
+  </div>
+</div>

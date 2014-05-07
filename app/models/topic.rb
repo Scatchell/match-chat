@@ -10,8 +10,7 @@ class Topic < ActiveRecord::Base
     session_exists_of_type(Session::GIVER_SESSION_TYPE)
   end
 
-  def associate_match_for_giver user, session=nil
-    session = first_session_of_type(Session::TAKER_SESSION_TYPE) unless session
+  def associate_match_for_giver user, session
 
     matching_chatroom = session.chatroom
     register_user_with_chatroom(user, matching_chatroom)
@@ -40,9 +39,9 @@ class Topic < ActiveRecord::Base
     self.save!
   end
 
-  def add_taker(chatroom, current_user)
+  def add_taker(chatroom, current_user, session_question=nil)
     chatroom.users = [current_user]
-    new_session = Session.create!(topic: self, chatroom: chatroom, session_type: Session::TAKER_SESSION_TYPE)
+    new_session = Session.create!(topic: self, chatroom: chatroom, session_type: Session::TAKER_SESSION_TYPE, question: session_question)
     self.sessions.push new_session
     self.save!
   end
@@ -59,12 +58,12 @@ class Topic < ActiveRecord::Base
     users.flatten
   end
 
-  private
   def first_session_of_type(session_type)
     ordered_sessions = self.sessions.order created_at: :asc
     ordered_sessions.select { |session| session.session_type == session_type }.first
   end
 
+  private
   def session_exists_of_type(session_type)
     self.sessions.each do |session|
       return true if session.session_type == session_type
@@ -73,7 +72,6 @@ class Topic < ActiveRecord::Base
     false
   end
 
-  private
   def register_user_with_chatroom(user, matching_chatroom)
     matching_chatroom.users.push user
   end
