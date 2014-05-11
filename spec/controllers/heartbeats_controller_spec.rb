@@ -8,7 +8,8 @@ describe HeartbeatsController do
 
   before { controller.stub(:authenticate_user!).and_return true }
 
-  before { controller.stub(:publish_to) }
+  #stubbing publish to method to avoid connection refused errors
+  before { controller.stub(:publish_message_to_chatroom) }
 
   let(:current_user) { create(:user) }
 
