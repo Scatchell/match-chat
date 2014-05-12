@@ -35,15 +35,12 @@ describe Topic do
     Session.count.should == 0
   end
 
-  it 'should match and destroy a session when there is a match on a giver' do
+  it 'should match a session when there is a match on a giver' do
     givers_chatroom = create(:chatroom)
-    topic.taker_has_match?.should == false
     topic.add_taker givers_chatroom, user
 
     topic.giver_has_match?.should == true
     topic.associate_match_for_giver(stub_model(User), givers_chatroom.session).should == givers_chatroom
-
-    Session.count.should == 0
   end
 
   it 'should list all takers' do

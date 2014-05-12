@@ -11,7 +11,8 @@
     <ul>
       <% @all_takers.each do |taker| %>
           <li><strong><%= taker.name %> </strong> has question:
-            <em><%= taker.chatroom.session.question %></em>, <%= link_to 'answer?', new_giver_path(@topic, session_id: taker.chatroom.session.id.to_s), method: :post %>
+            <!--todo this if nil then default logic is used a lot, does rails provide a method or can I make a global helper to do so?-->
+            <em><%= taker.chatroom.question.nil? ? 'No question entered' : taker.chatroom.question %></em>, <%= link_to 'answer?', new_giver_path(@topic, session_id: taker.chatroom.session.id.to_s), method: :post %>
           </li>
       <% end %>
     </ul>

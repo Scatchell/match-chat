@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140507171231) do
+ActiveRecord::Schema.define(version: 20140511161427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20140507171231) do
     t.integer  "session_id"
     t.datetime "ended_at"
     t.integer  "intervals_passed", default: 0, null: false
+    t.string   "question"
   end
 
   add_index "chatrooms", ["session_id"], name: "index_chatrooms_on_session_id", using: :btree
@@ -49,7 +50,6 @@ ActiveRecord::Schema.define(version: 20140507171231) do
     t.string   "session_type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "question"
   end
 
   add_index "sessions", ["topic_id"], name: "index_sessions_on_topic_id", using: :btree

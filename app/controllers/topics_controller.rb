@@ -10,20 +10,19 @@ class TopicsController < ApplicationController
   def register_giver
     if params[:session_id]
       takers_session = Session.find(params[:session_id])
-      session_question = takers_session.question
-      # todo there a better way to deal with session questions? Should it be an attribute on the chatroom model instead?
       matching_chatroom = @topic.associate_match_for_giver(current_user, takers_session)
+      takers_session.destroy!
 
-      redirect_to chatroom_path(matching_chatroom, question: session_question)
+      redirect_to chatroom_path(matching_chatroom)
     else
       if @topic.giver_has_match?
         session = @topic.first_session_of_type(Session::TAKER_SESSION_TYPE)
 
-        session_question = session.question
-
         matching_chatroom = @topic.associate_match_for_giver(current_user, session)
 
-        redirect_to chatroom_path(matching_chatroom, question: session_question)
+        session.destroy!
+
+        redirect_to chatroom_path(matching_chatroom)
       else
         chatroom = @topic.create_chatroom
         @topic.add_giver chatroom, current_user
@@ -38,10 +37,10 @@ class TopicsController < ApplicationController
 
       redirect_to matching_chatroom
     else
-      session_question = params[:question]
-      chatroom = @topic.create_chatroom
-      @topic.add_taker chatroom, current_user, session_question
-      redirect_to chatroom_path(chatroom, question: session_question)
+      chatroom_question = params[:question]
+      chatroom = @topic.create_chatroom chatroom_question
+      @topic.add_taker chatroom, current_user
+      redirect_to chatroom_path(chatroom)
     end
   end
 

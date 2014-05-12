@@ -11,11 +11,8 @@ class Topic < ActiveRecord::Base
   end
 
   def associate_match_for_giver user, session
-
     matching_chatroom = session.chatroom
     register_user_with_chatroom(user, matching_chatroom)
-
-    session.destroy!
 
     matching_chatroom
   end
@@ -39,16 +36,16 @@ class Topic < ActiveRecord::Base
     self.save!
   end
 
-  def add_taker(chatroom, current_user, session_question=nil)
+  def add_taker(chatroom, current_user)
     chatroom.users = [current_user]
-    new_session = Session.create!(topic: self, chatroom: chatroom, session_type: Session::TAKER_SESSION_TYPE, question: session_question)
+    new_session = Session.create!(topic: self, chatroom: chatroom, session_type: Session::TAKER_SESSION_TYPE)
     self.sessions.push new_session
     self.save!
   end
 
 
-  def create_chatroom
-    Chatroom.create!(title: 'Chatroom for ' + self.name)
+  def create_chatroom chatroom_question=nil
+    Chatroom.create!(title: 'Chatroom for ' + self.name, question: chatroom_question)
   end
 
   def all_takers

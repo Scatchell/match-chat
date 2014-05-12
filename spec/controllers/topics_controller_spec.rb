@@ -81,7 +81,9 @@ describe TopicsController do
     Timecop.freeze(latest_time)
     topic.add_taker create(:chatroom), current_user
 
+    expect {
     post :register_giver, {id: topic.to_param}, valid_session
+    }.to change(Session, :count).by(-1)
 
     response.should redirect_to(first_takers_chatroom)
   end
@@ -124,7 +126,9 @@ describe TopicsController do
     Timecop.freeze(latest_time)
     topic.add_taker create(:chatroom), current_user
 
-    post :register_giver, {id: topic.to_param, session_id: session_for_second_taker.id}, valid_session
+    expect {
+      post :register_giver, {id: topic.to_param, session_id: session_for_second_taker.id}, valid_session
+    }.to change(Session, :count).by(-1)
 
     response.should redirect_to(second_takers_chatroom)
   end
@@ -134,9 +138,9 @@ describe TopicsController do
 
     question = 'Test question'
     post :register_taker, {id: topic.to_param, question: question}
-    users_session = current_user.chatroom.session
+    users_chatroom = current_user.chatroom
 
-    users_session.question.should == question
+    users_chatroom.question.should == question
   end
 
 end

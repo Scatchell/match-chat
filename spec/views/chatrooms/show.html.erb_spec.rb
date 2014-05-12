@@ -6,13 +6,16 @@ describe 'chatrooms/show' do
   end
 
   describe 'message list rendering' do
-    it 'should show room with title and description when no messages' do
+    it 'should show room with title, description, and question when no messages' do
       message_list = []
       @messages = assign(:messages, message_list)
+      @chatroom.question = 'test_question'
+      # @chatroom.save
 
       render
 
       rendered.should include(@chatroom.title)
+      rendered.should include(@chatroom.question)
     end
 
     it 'should show room with title, previous messages, and user name' do

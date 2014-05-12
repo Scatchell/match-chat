@@ -4,7 +4,10 @@
 
 <div id="topics" class="centered">
   <div class="span4 centered">
-    Have a specific question you want to ask about? Put it here:
+    <div style="margin-bottom: 30px;">
+      <h4>Have a specific question you want to ask about? Type it below.</h4>
+    </div>
+
     <%= form_tag(new_taker_path(@topic), method: 'post') do %>
         <%= label_tag(:question, 'Question:') %>
         <%= text_field_tag(:question) %>
