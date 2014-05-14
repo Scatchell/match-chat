@@ -56,5 +56,6 @@ gem 'twitter-bootstrap-rails'
 gem 'factory_girl'
 gem 'database_cleaner'
 gem 'timecop'
+gem 'newrelic_rpm'
 
 ruby '2.0.0'
